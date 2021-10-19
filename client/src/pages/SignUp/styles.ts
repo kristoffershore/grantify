@@ -16,7 +16,6 @@ export const Content = styled.div`
   justify-content: center;
   width: 100%;
   max-width: 700px;
-  }
 `;
 
 const appearFromRight = keyframes`
@@ -56,7 +55,7 @@ export const AnimationContainer = styled.div`
     }
   }
   > a {
-    color: #8257E5;
+    color: #4080ea;
     display: block;
     margin-top: 24px;
     text-decoration: none;
@@ -67,7 +66,7 @@ export const AnimationContainer = styled.div`
       margin-right: 16px;
     }
     &:hover {
-      color: ${shade(0.2, '#8257E5')};
+      color: ${shade(0.2, '#4080ea')};
     }
 `;
 

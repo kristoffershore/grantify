@@ -1,6 +1,6 @@
 import AppError from '@common/errors/AppError';
 
-import FakeUsersRepository from '../repositories/fakes/FakeUsersRepository';
+import FakeUsersRepository from '../infra/db/repositories/fakes/FakeUsersRepository';
 import ShowProfileService from './ShowProfileService';
 
 let fakeUsersRepository: FakeUsersRepository;
@@ -21,7 +21,7 @@ describe('UpdateProfile', () => {
     });
 
     const profile = await showProfile.execute({
-      user_id: user.id,
+      userId: user.id,
     });
 
     expect(profile.name).toBe('Barry Allen');
@@ -31,7 +31,7 @@ describe('UpdateProfile', () => {
   it('should not be able to list the profile of a nonexistent user', async () => {
     await expect(
       showProfile.execute({
-        user_id: 'nonexistent user id',
+        userId: 'nonexistent user id',
       }),
     ).rejects.toBeInstanceOf(AppError);
   });

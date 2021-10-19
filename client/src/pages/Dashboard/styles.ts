@@ -2,23 +2,6 @@ import styled from 'styled-components';
 
 export const Container = styled.div``;
 
-export const Nav = styled.header`
-  padding: 32px 0;
-  background: #fff;
-  border: 1px solid #dce2e6;
-`;
-
-export const NavContent = styled.div`
-  max-width: 1120px;
-  margin: 0 auto;
-  display: flex;
-  align-items: flex-start;
-
-  a {
-    text-decoration: none;
-  }
-`;
-
 export const Profile = styled.div`
   display: flex;
   align-items: center;
@@ -42,7 +25,7 @@ export const Profile = styled.div`
 
     a {
       text-decoration: none;
-      color: #8257e5;
+      color: #4080ea;
 
       &:hover {
         opacity: 0.8;

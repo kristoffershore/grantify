@@ -2,9 +2,9 @@ import { inject, injectable } from 'tsyringe';
 import path from 'path';
 
 import AppError from '@common/errors/AppError';
-import IMailProvider from '@common/container/providers/MailProvider/models/IMailProvider';
-import IUsersRepository from '../repositories/IUsersRepository';
-import IUserTokensRepository from '../repositories/IUserTokensRepository';
+import IMailProvider from '@common/container/providers/MailProvider/interfaces/IMailProvider';
+import IUserTokensRepository from '../infra/db/repositories/interfaces/IUserTokensRepository';
+import IUsersRepository from '../infra/db/repositories/interfaces/IUsersRepository';
 
 interface IRequest {
   email: string;

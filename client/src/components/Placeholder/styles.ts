@@ -13,7 +13,7 @@ export const Container = styled.div`
   align-items: center;
 
   h3 {
-    color: #8257e5;
+    color: #4080ea;
     font-size: 2rem;
     line-height: 3rem;
     margin-top: 20px;

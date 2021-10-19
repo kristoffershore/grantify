@@ -35,13 +35,16 @@ export const AnimationContainer = styled.div`
   align-items: center;
   justify-content: center;
   animation: ${appearFromLeft} 1s;
+
   form {
     margin: 80px 0;
     width: 340px;
     text-align: center;
+
     h1 {
       margin-bottom: 24px;
     }
+
     a {
       color: #f4ede8;
       display: block;
@@ -53,8 +56,9 @@ export const AnimationContainer = styled.div`
       }
     }
   }
+
   > a {
-    color: #8257e5;
+    color: #4080ea;
     display: block;
     margin-top: 24px;
     text-decoration: none;
@@ -65,7 +69,7 @@ export const AnimationContainer = styled.div`
       margin-right: 16px;
     }
     &:hover {
-      color: ${shade(0.2, '#8257e5')};
+      color: ${shade(0.2, '#4080ea')};
     }
   }
 `;

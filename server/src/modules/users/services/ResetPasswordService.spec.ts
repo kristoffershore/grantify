@@ -1,7 +1,7 @@
 import AppError from '@common/errors/AppError';
 
-import FakeUsersRepository from '../repositories/fakes/FakeUsersRepository';
-import FakeUserTokensRepository from '../repositories/fakes/FakeUserTokensRepository';
+import FakeUsersRepository from '../infra/db/repositories/fakes/FakeUsersRepository';
+import FakeUserTokensRepository from '../infra/db/repositories/fakes/FakeUserTokensRepository';
 import FakeHashProvider from '../providers/HashProvider/fakes/FakeHashProvider';
 
 import ResetPasswordService from './ResetPasswordService';
@@ -50,7 +50,7 @@ describe('ResetPasswordService', () => {
   it('should not be able to reset the password with a nonexistent user token', async () => {
     await expect(
       resetPassword.execute({
-        token: 'nonexistent-token',
+        token: '1a379f81-7c35-4def-b8f8-bf2b244608a3',
         password: '123456',
       }),
     ).rejects.toBeInstanceOf(AppError);

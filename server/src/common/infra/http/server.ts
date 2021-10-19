@@ -9,7 +9,7 @@ import 'express-async-errors';
 import AppError from '@common/errors/AppError';
 import routes from './routes';
 
-import '@common/infra/typeorm';
+import '@common/infra/db';
 import '@common/container';
 
 const app = express();

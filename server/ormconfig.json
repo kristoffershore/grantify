@@ -7,10 +7,10 @@
     "username": "postgres",
     "password": "postgres",
     "database": "grantify_dev",
-    "entities": ["./src/modules/**/infra/typeorm/entities/*.ts"],
-    "migrations": ["./src/common/infra/typeorm/migrations/*.ts"],
+    "entities": ["./src/modules/**/infra/db/entities/*.ts"],
+    "migrations": ["./src/common/infra/db/migrations/*.ts"],
     "cli": {
-      "migrationsDir": "./src/common/infra/typeorm/migrations"
+      "migrationsDir": "./src/common/infra/db/migrations"
     }
   }
 ]

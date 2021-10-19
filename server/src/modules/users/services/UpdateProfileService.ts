@@ -1,12 +1,12 @@
 import { inject, injectable } from 'tsyringe';
 
-import User from '@modules/users/infra/typeorm/entities/User';
+import User from '@modules/users/infra/db/entities/User';
 import AppError from '@common/errors/AppError';
-import IUsersRepository from '../repositories/IUsersRepository';
-import IHashProvider from '../providers/HashProvider/models/IHashProvider';
+import IHashProvider from '../providers/HashProvider/interfaces/IHashProvider';
+import IUsersRepository from '../infra/db/repositories/interfaces/IUsersRepository';
 
 interface IRequest {
-  user_id: string;
+  userId: string;
   name: string;
   email: string;
   old_password?: string;
@@ -24,13 +24,13 @@ class UpdateProfileService {
   ) {}
 
   public async execute({
-    user_id,
+    userId,
     name,
     email,
     password,
     old_password,
   }: IRequest): Promise<User> {
-    const user = await this.usersRepository.findById(user_id);
+    const user = await this.usersRepository.findById(userId);
 
     if (!user) {
       throw new AppError('User not found.');
@@ -38,7 +38,7 @@ class UpdateProfileService {
 
     const userWithUpdatedEmail = await this.usersRepository.findByEmail(email);
 
-    if (userWithUpdatedEmail && userWithUpdatedEmail.id !== user_id) {
+    if (userWithUpdatedEmail && userWithUpdatedEmail.id !== userId) {
       throw new AppError('Email already in use.');
     }
 

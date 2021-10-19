@@ -3,7 +3,7 @@ import styled from 'styled-components';
 export const Header = styled.header`
   display: flex;
   flex-direction: column;
-  background-color: #8257e5;
+  background-color: #4080ea;
 
   @media (min-width: 700px) {
     height: 340px;
@@ -16,7 +16,7 @@ export const TopBarContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  color: #d4c2ff;
+  color: #fff;
   padding: 1.6rem 0;
 
   a {
@@ -51,7 +51,7 @@ export const HeaderContent = styled.div`
     max-width: 30rem;
     font-size: 1.6rem;
     line-height: 2.6rem;
-    color: #d4c2ff;
+    color: #fff;
     margin-top: 2.4rem;
   }
 

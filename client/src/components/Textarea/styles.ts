@@ -31,7 +31,7 @@ export const Container = styled.div`
     width: (100% - 3.2rem);
     height: 2px;
     content: '';
-    background: #916bea;
+    background: #4080ea;
     position: absolute;
     left: 1.6rem;
     right: 1.6rem;

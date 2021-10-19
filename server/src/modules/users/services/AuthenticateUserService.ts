@@ -3,9 +3,9 @@ import { inject, injectable } from 'tsyringe';
 import authConfig from '@config/auth';
 
 import AppError from '@common/errors/AppError';
-import User from '@modules/users/infra/typeorm/entities/User';
-import IUsersRepository from '../repositories/IUsersRepository';
-import IHashProvider from '../providers/HashProvider/models/IHashProvider';
+import User from '@modules/users/infra/db/entities/User';
+import IHashProvider from '../providers/HashProvider/interfaces/IHashProvider';
+import IUsersRepository from '../infra/db/repositories/interfaces/IUsersRepository';
 
 interface IRequest {
   email: string;

@@ -64,7 +64,7 @@ const SignIn: React.FC = () => {
           type: 'error',
           title: 'Authentication error',
           description:
-            'An error occurred while trying to log you in, please check credentials.',
+            'An error occurred while trying to log you in, please check your credentials.',
         });
       }
     },

@@ -1,6 +1,6 @@
 import AppError from '@common/errors/AppError';
 
-import FakeUsersRepository from '../repositories/fakes/FakeUsersRepository';
+import FakeUsersRepository from '../infra/db/repositories/fakes/FakeUsersRepository';
 import FakeHashProvider from '../providers/HashProvider/fakes/FakeHashProvider';
 import CreateUserService from './CreateUserService';
 
@@ -26,7 +26,7 @@ describe('CreateUser', () => {
     expect(user).toHaveProperty('id');
   });
 
-  it('should not be able to create a new user with email from another user', async () => {
+  it('should not be able to create a new user with an email that is already in use', async () => {
     await createUser.execute({
       name: 'John Doe',
       email: 'johndoe@example.com',
@@ -35,9 +35,9 @@ describe('CreateUser', () => {
 
     await expect(
       createUser.execute({
-        name: 'John Doe',
+        name: 'Barry Allen',
         email: 'johndoe@example.com',
-        password: '123123',
+        password: 'starlabs',
       }),
     ).rejects.toBeInstanceOf(AppError);
   });

@@ -1,6 +1,6 @@
 import AppError from '@common/errors/AppError';
 
-import FakeUsersRepository from '../repositories/fakes/FakeUsersRepository';
+import FakeUsersRepository from '../infra/db/repositories/fakes/FakeUsersRepository';
 import FakeHashProvider from '../providers/HashProvider/fakes/FakeHashProvider';
 import UpdateProfileService from './UpdateProfileService';
 
@@ -27,7 +27,7 @@ describe('UpdateProfile', () => {
     });
 
     const updatedUser = await updateProfile.execute({
-      user_id: user.id,
+      userId: user.id,
       name: 'Wally West',
       email: 'wwest@starlabs.com',
     });
@@ -39,7 +39,7 @@ describe('UpdateProfile', () => {
   it('should not be able to update the profile of a nonexistent user', async () => {
     await expect(
       updateProfile.execute({
-        user_id: 'nonexistent user id',
+        userId: 'nonexistent user id',
         name: 'Test',
         email: 'test@example.com',
       }),
@@ -61,7 +61,7 @@ describe('UpdateProfile', () => {
 
     await expect(
       updateProfile.execute({
-        user_id: user.id,
+        userId: user.id,
         name: 'Barry Allen',
         email: 'ballen@starlabs.com',
       }),
@@ -76,7 +76,7 @@ describe('UpdateProfile', () => {
     });
 
     const updatedUser = await updateProfile.execute({
-      user_id: user.id,
+      userId: user.id,
       name: 'Oliver Queen',
       email: 'oqueen@queenindustries.com',
       old_password: '123456',
@@ -95,7 +95,7 @@ describe('UpdateProfile', () => {
 
     await expect(
       updateProfile.execute({
-        user_id: user.id,
+        userId: user.id,
         name: 'Oliver Queen',
         email: 'oqueen@queenindustries.com',
         password: '321321',
@@ -112,7 +112,7 @@ describe('UpdateProfile', () => {
 
     await expect(
       updateProfile.execute({
-        user_id: user.id,
+        userId: user.id,
         name: 'Oliver Queen',
         email: 'oqueen@queenindustries.com',
         old_password: 'wrong-pw',
