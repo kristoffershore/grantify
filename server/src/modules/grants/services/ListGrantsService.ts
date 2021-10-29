@@ -5,6 +5,7 @@ import Grant from '../infra/db/entities/Grant';
 
 interface IRequest {
   sponsorName: string;
+  grantName: string;
 }
 
 @injectable()
@@ -22,6 +23,14 @@ export default class ListGrantService {
   public async findBySponsorName({ sponsorName }: IRequest): Promise<Grant[]> {
     const grants = await this.grantsRepository.findAllBySponsorName(
       sponsorName,
+    );
+
+    return grants;
+  }
+
+  public async findByGrantName({ grantName }: IRequest): Promise<Grant[]> {
+    const grants = await this.grantsRepository.findByGrantName(
+      grantName,
     );
 
     return grants;

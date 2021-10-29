@@ -17,10 +17,12 @@ export default class FakeGrantsRepository implements IGrantsRepository {
     return this.grants.filter(g => g.id);
   }
 
-  public async findByGrantName(name: string): Promise<Grant | undefined> {
-    const grant = this.grants.find(g => g.grantName === name);
+  public async findByGrantName(grantName: string): Promise<Grant[]> {
+    const grants = this.grants.filter(
+      grant => grant.grantName === grantName,
+    );
 
-    return grant;
+    return grants;
   }
 
   public async findAllBySponsorName(sponsorName: string): Promise<Grant[]> {
