@@ -24,7 +24,6 @@ const GrantList: React.FC = () => {
   const [grants, setGrants] = useState<Grant[]>([]);
   const [sponsorName, setSponsorName] = useState('');
   const [grantName, setGrantName] = useState('');
-  const [openDate, setOpenDate] = useState(new Date());
 
   const searchGrantName = useCallback(
     async (e: FormEvent) => {
@@ -33,14 +32,12 @@ const GrantList: React.FC = () => {
       const response = await api.get('grants', {
         params: {
           grantName,
-          sponsorName,
         },
       });
 
       setGrants(
         response.data.filter(
           (grant: Grant) => grant.grantName === grantName,
-          (grant: Grant) => grant.sponsorName === sponsorName,
           
         ),
       );
@@ -49,20 +46,19 @@ const GrantList: React.FC = () => {
     
     
   );
+
   const searchGrantSponsor = useCallback(
     async (e: FormEvent) => {
       e.preventDefault();
 
       const response = await api.get('grants', {
         params: {
-          grantName,
           sponsorName,
         },
       });
 
       setGrants(
         response.data.filter(
-          (grant: Grant) => grant.grantName === grantName,
           (grant: Grant) => grant.sponsorName === sponsorName,
           
         ),

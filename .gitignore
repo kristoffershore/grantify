@@ -1,6 +1,7 @@
 **/node_modules
 **/coverage
 **/yarn.lock
+**/yarn-error.log
 **/dist
 **/.env
 **/ormconfig.json
