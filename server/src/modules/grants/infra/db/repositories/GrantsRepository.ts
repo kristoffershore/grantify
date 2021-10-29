@@ -27,14 +27,14 @@ export default class GrantsRepository implements IGrantsRepository {
     return grants;
   }
 
-  public async findByGrantName(name: string): Promise<Grant | undefined> {
-    const grant = await this.ormRepository.findOne({
+  public async findByGrantName(grantName: string): Promise<Grant[]> {
+    const grants = await this.ormRepository.find({
       where: {
-        grantName: name,
+        grantName,
       },
     });
 
-    return grant;
+    return grants;
   }
 
   public async findAllBySponsorName(sponsorName: string): Promise<Grant[]> {

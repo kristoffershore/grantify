@@ -23,25 +23,54 @@ export type Grant = {
 const GrantList: React.FC = () => {
   const [grants, setGrants] = useState<Grant[]>([]);
   const [sponsorName, setSponsorName] = useState('');
+  const [grantName, setGrantName] = useState('');
   const [openDate, setOpenDate] = useState(new Date());
 
-  const searchGrants = useCallback(
+  const searchGrantName = useCallback(
     async (e: FormEvent) => {
       e.preventDefault();
 
       const response = await api.get('grants', {
         params: {
+          grantName,
           sponsorName,
         },
       });
 
       setGrants(
         response.data.filter(
+          (grant: Grant) => grant.grantName === grantName,
           (grant: Grant) => grant.sponsorName === sponsorName,
+          
         ),
       );
     },
-    [sponsorName],
+    [grantName], 
+    
+    
+  );
+  const searchGrantSponsor = useCallback(
+    async (e: FormEvent) => {
+      e.preventDefault();
+
+      const response = await api.get('grants', {
+        params: {
+          grantName,
+          sponsorName,
+        },
+      });
+
+      setGrants(
+        response.data.filter(
+          (grant: Grant) => grant.grantName === grantName,
+          (grant: Grant) => grant.sponsorName === sponsorName,
+          
+        ),
+      );
+    },
+     
+    [sponsorName]
+    
   );
 
   useEffect(() => {
@@ -51,8 +80,16 @@ const GrantList: React.FC = () => {
   return (
     <Container>
       <PageHeader title="Grants">
-        <Form onSubmit={searchGrants}>
-          {/* <ListSelect
+      <Form onSubmit={searchGrantName}>
+
+        { <ListInput
+            name="grantName"
+            label="Grant Name"
+            type="text"
+            onChange={e => setGrantName(e.target.value)}
+          /> }
+
+          <ListSelect
             name="status"
             label="Status"
             options={[
@@ -62,23 +99,23 @@ const GrantList: React.FC = () => {
               { value: 'Invalid', label: 'Invalid' },
             ]}
             onChange={e => setSponsorName(e.target.value)}
-          /> */}
+          /> 
 
-          {/* <ListInput
+          <ListInput
             name="Open Date"
             label="Open Date"
             type="time"
             onChange={e => console.log(e)}
-          /> */}
+          />
 
-          {/* <ListInput
+          { <ListInput
             name="sponsorName"
             label="Sponsor Name"
             type="text"
             onChange={e => setSponsorName(e.target.value)}
-          />
+          /> }
 
-          <button type="submit">Search</button> */}
+          <button type="submit">Search</button>
         </Form>
       </PageHeader>
 
