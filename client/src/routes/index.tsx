@@ -7,11 +7,12 @@ import SignIn from '../pages/SignIn';
 import SignUp from '../pages/SignUp';
 
 import Profile from '../pages/Profile';
-import Dashboard from '../pages/Dashboard';
 import ForgotPassword from '../pages/ForgotPassword';
 import ResetPassword from '../pages/ResetPassword';
 import GrantView from '../pages/GrantView';
 import GrantList from '../pages/GrantList';
+import Home from '../pages/Home';
+import PermissionBoard from '../pages/PermissionBoard';
 
 const Routes: React.FC = () => {
   return (
@@ -21,9 +22,10 @@ const Routes: React.FC = () => {
       <Route path="/forgot-password" component={ForgotPassword} />
       <Route path="/reset-password" component={ResetPassword} />
 
-      <Route path="/dashboard" exact component={Dashboard} isPrivate />
-      <Route path="/dashboard/grants" exact component={GrantList} isPrivate />
-      <Route path="/dashboard/grants/:id" component={GrantView} isPrivate />
+      <Route path="/home" component={Home} isPrivate />
+      <Route path="/grants" exact component={GrantList} isPrivate />
+      <Route path="/grants/:id" component={GrantView} isPrivate />
+      <Route path="/permissions" exact component={PermissionBoard} isPrivate />
       {/* <Route path="/dashboard/grants/new" component={GrantForm} isPrivate /> */}
       {/* <Route
         path="/dashboard/grants/:id/edit"

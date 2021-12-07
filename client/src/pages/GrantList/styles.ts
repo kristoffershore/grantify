@@ -53,7 +53,7 @@ export const Form = styled.form`
 
   @media (min-width: 700px) {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
     column-gap: 16px;
     position: absolute;
     bottom: -28px;

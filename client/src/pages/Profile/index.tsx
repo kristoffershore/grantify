@@ -111,7 +111,7 @@ const Profile: React.FC = () => {
     <Container>
       <header>
         <div>
-          <Link to="/dashboard">
+          <Link to="/home">
             <FiArrowLeft />
           </Link>
         </div>

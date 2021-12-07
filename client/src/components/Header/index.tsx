@@ -34,7 +34,7 @@ const Header: React.FC<HeaderProps> = ({
 
             {redirectTo && (
               <Link to={redirectTo}>
-                <Button onClick={() => history.push('/dashboard')}>
+                <Button onClick={() => history.push('/home')}>
                   {buttonText}
                 </Button>
               </Link>
