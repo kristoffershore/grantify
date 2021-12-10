@@ -18,7 +18,7 @@ const GrantView: React.FC = () => {
     <div className="flex">
       <SideBar signOut={signOut} />
       <div className="content-container">
-        <TopNavigation />
+        {/* <TopNavigation /> */}
         <div className="content-list">
           <h1 className="content-title">UNF Covid Grant</h1>
 
@@ -88,14 +88,14 @@ const DataBox: React.FC<{ title: string; data: string; link?: string }> = ({
         )}
       </div>
 
-      {!isNaN(Number(data)) && (
+      {/* {!isNaN(Number(data)) && (
         <div className="data-box-graph">
           <img
             src={Math.floor(Math.random() * 2 + 1) % 2 === 0 ? dummy1 : dummy2}
             alt="Graph"
           />
         </div>
-      )}
+      )} */}
     </div>
   );
 };

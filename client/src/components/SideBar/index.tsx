@@ -1,9 +1,9 @@
 import {
   BsPlus,
-  BsGearFill,
   BsPower,
   BsClipboardData,
   BsPeopleFill,
+  BsGear,
 } from 'react-icons/bs';
 import { FaCalendar, FaFire } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
@@ -25,16 +25,20 @@ const SideBar: React.FC<{ signOut(): void }> = ({ signOut }) => {
         <Link to="/grants/:id">
           <SideBarIcon icon={<BsClipboardData size="20" />} text="Grants" />
         </Link>
-        <SideBarIcon icon={<FaCalendar size="20" />} text="Calendar" />
-        <SideBarIcon icon={<BsPeopleFill size="20" />} text="Grantors" />
-        <Link to="/permissions">
-          <SideBarIcon icon={<BsGearFill size="20" />} text="Permissions" />
+        {/* <SideBarIcon icon={<FaCalendar size="20" />} text="Calendar" /> */}
+        {/* <SideBarIcon icon={<BsPeopleFill size="20" />} text="Grantors" /> */}
+        <Link to="/users">
+          <SideBarIcon icon={<BsPeopleFill size="20" />} text="Users" />
         </Link>
-        <Divider />
       </div>
-      <button type="submit" onClick={signOut}>
-        <SideBarIcon icon={<BsPower size="22" />} text="Log out" />
-      </button>
+      <div className="flex-end">
+        <Link to="/profile">
+          <SideBarIcon icon={<BsGear size="20" />} text="Profile" />
+        </Link>
+        <button type="submit" onClick={signOut}>
+          <SideBarIcon icon={<BsPower size="22" />} text="Log out" />
+        </button>
+      </div>
     </div>
   );
 };

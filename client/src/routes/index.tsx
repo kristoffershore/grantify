@@ -6,12 +6,13 @@ import Route from './Route';
 import SignIn from '../pages/SignIn';
 import SignUp from '../pages/SignUp';
 
-import Profile from '../pages/Profile';
 import ForgotPassword from '../pages/ForgotPassword';
 import ResetPassword from '../pages/ResetPassword';
 import GrantView from '../pages/GrantView';
 import GrantList from '../pages/GrantList';
 import Home from '../pages/Home';
+import Profile from '../pages/Profile';
+import UserTable from '../pages/UserTable';
 import PermissionBoard from '../pages/PermissionBoard';
 
 const Routes: React.FC = () => {
@@ -25,7 +26,8 @@ const Routes: React.FC = () => {
       <Route path="/home" component={Home} isPrivate />
       <Route path="/grants" exact component={GrantList} isPrivate />
       <Route path="/grants/:id" component={GrantView} isPrivate />
-      <Route path="/permissions" exact component={PermissionBoard} isPrivate />
+      <Route path="/users" exact component={UserTable} isPrivate />
+      <Route path="/users/:id/edit" component={PermissionBoard} isPrivate />
       {/* <Route path="/dashboard/grants/new" component={GrantForm} isPrivate /> */}
       {/* <Route
         path="/dashboard/grants/:id/edit"

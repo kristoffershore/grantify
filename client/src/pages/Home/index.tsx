@@ -5,6 +5,7 @@ import TopNavigation from '../../components/TopNavigation';
 import { useAuth } from '../../hooks/auth';
 
 import { Container, Content, Section } from './styles';
+import { BsTrash } from 'react-icons/bs';
 
 // type Grant = {
 //   id: number;
@@ -47,7 +48,7 @@ const Home: React.FC = () => {
 const ContentContainer: React.FC<{ title: string }> = ({ title }) => {
   return (
     <div className="content-container">
-      <TopNavigation />
+      {/* <TopNavigation /> */}
       <div className="content-list">
         <h1 className="content-title">{title}</h1>
         <GrantTable />
@@ -159,6 +160,9 @@ const GrantTable: React.FC = () => {
                   <th scope="col" className="relative px-6 py-3">
                     <span className="sr-only">Edit</span>
                   </th>
+                  <th scope="col" className="relative px-6 py-3">
+                    <span className="sr-only">X</span>
+                  </th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
@@ -222,6 +226,14 @@ const GrantTable: React.FC = () => {
                         className="text-indigo-600 hover:text-indigo-900"
                       >
                         Edit
+                      </a>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                      <a
+                        href="#"
+                        className="text-indigo-600 hover:text-indigo-900"
+                      >
+                        <BsTrash />
                       </a>
                     </td>
                   </tr>

@@ -1,21 +1,17 @@
-import React, { useCallback, useRef } from 'react';
-import { FiUser, FiMail, FiLock, FiArrowLeft } from 'react-icons/fi';
 import { FormHandles } from '@unform/core';
 import { Form } from '@unform/web';
+import React, { useCallback, useRef } from 'react';
+import { FiLock, FiMail, FiUser } from 'react-icons/fi';
+import { useHistory } from 'react-router';
 import * as Yup from 'yup';
-import { Link, useHistory } from 'react-router-dom';
 
-import api from '../../services/api';
-
-import { useToast } from '../../hooks/toast';
-
-import getValidationErrors from '../../utils/getValidationErrors';
-
-import Input from '../../components/Input';
 import Button from '../../components/Button';
-
-import { Container, Content } from './styles';
+import Input from '../../components/Input';
+import SideBar from '../../components/SideBar';
 import { useAuth } from '../../hooks/auth';
+import { useToast } from '../../hooks/toast';
+import api from '../../services/api';
+import getValidationErrors from '../../utils/getValidationErrors';
 
 interface ProfileFormData {
   name: string;
@@ -26,6 +22,28 @@ interface ProfileFormData {
 }
 
 const Profile: React.FC = () => {
+  const { signOut } = useAuth();
+
+  return (
+    <div className="flex">
+      <SideBar signOut={signOut} />
+      <ContentContainer title="Profile" />
+    </div>
+  );
+};
+
+const ContentContainer: React.FC<{ title: string }> = ({ title }) => {
+  return (
+    <div className="content-container">
+      <div className="content-list">
+        <h1 className="content-title">{title}</h1>
+        <ProfileSection />
+      </div>
+    </div>
+  );
+};
+
+const ProfileSection: React.FC = () => {
   const formRef = useRef<FormHandles>(null);
   const { addToast } = useToast();
   const history = useHistory();
@@ -108,56 +126,42 @@ const Profile: React.FC = () => {
   );
 
   return (
-    <Container>
-      <header>
-        <div>
-          <Link to="/home">
-            <FiArrowLeft />
-          </Link>
-        </div>
-      </header>
+    <Form
+      ref={formRef}
+      initialData={{
+        name: user.name,
+        email: user.email,
+      }}
+      onSubmit={handleSubmit}
+    >
+      <Input name="name" icon={FiUser} placeholder="Name" />
 
-      <Content>
-        <Form
-          ref={formRef}
-          initialData={{
-            name: user.name,
-            email: user.email,
-          }}
-          onSubmit={handleSubmit}
-        >
-          <h1>My profile</h1>
+      <Input name="email" icon={FiMail} placeholder="E-mail" />
 
-          <Input name="name" icon={FiUser} placeholder="Name" />
+      <Input
+        containerStyle={{ marginTop: 24 }}
+        name="old_password"
+        icon={FiLock}
+        type="password"
+        placeholder="Current password"
+      />
 
-          <Input name="email" icon={FiMail} placeholder="E-mail" />
+      <Input
+        name="password"
+        icon={FiLock}
+        type="password"
+        placeholder="New password"
+      />
 
-          <Input
-            containerStyle={{ marginTop: 24 }}
-            name="old_password"
-            icon={FiLock}
-            type="password"
-            placeholder="Current password"
-          />
+      <Input
+        name="password_confirmation"
+        icon={FiLock}
+        type="password"
+        placeholder="Password confirmation"
+      />
 
-          <Input
-            name="password"
-            icon={FiLock}
-            type="password"
-            placeholder="New password"
-          />
-
-          <Input
-            name="password_confirmation"
-            icon={FiLock}
-            type="password"
-            placeholder="Password confirmation"
-          />
-
-          <Button type="submit">Confirm changes</Button>
-        </Form>
-      </Content>
-    </Container>
+      <Button type="submit">Confirm changes</Button>
+    </Form>
   );
 };
 
