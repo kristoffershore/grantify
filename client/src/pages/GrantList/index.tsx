@@ -1,4 +1,5 @@
 import React, { useCallback, FormEvent, useState, useEffect } from 'react';
+import { FaSearch, FaRegBell, FaUserCircle } from 'react-icons/fa';
 
 import PageHeader from '../../components/PageHeader';
 import ListSelect from '../../components/ListSelect';
@@ -7,6 +8,7 @@ import api from '../../services/api';
 import Placeholder from '../../components/Placeholder';
 import ListInput from '../../components/ListInput';
 import GrantCard from '../../components/GrantCard';
+import Input from '../../components/Input';
 
 export type Grant = {
   id: string;
@@ -19,6 +21,7 @@ export type Grant = {
   sponsorName: string;
   sponsorUrl: string;
 };
+
 
 const GrantList: React.FC = () => {
   const [grants, setGrants] = useState<Grant[]>([]);
@@ -40,7 +43,7 @@ const GrantList: React.FC = () => {
           (grant: Grant) => grant.grantName === grantName,
           
         ),
-      );
+      );  
     },
     [grantName], 
     

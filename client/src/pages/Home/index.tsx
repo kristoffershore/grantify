@@ -1,11 +1,14 @@
-import React, { useState } from 'react';
+import React, { FormEvent, useCallback, useState } from 'react';
 import SideBar from '../../components/SideBar';
 import { Link } from 'react-router-dom';
 import TopNavigation from '../../components/TopNavigation';
+import Search from '../../components/Search';
 import { useAuth } from '../../hooks/auth';
 
 import { Container, Content, Section } from './styles';
 import { BsTrash } from 'react-icons/bs';
+import { FaSearch } from 'react-icons/fa';
+import api from '../../services/api';
 
 // type Grant = {
 //   id: number;
@@ -46,11 +49,33 @@ const Home: React.FC = () => {
 };
 
 const ContentContainer: React.FC<{ title: string }> = ({ title }) => {
+  const [searchKey, setSearchKey] = useState('');
   return (
     <div className="content-container">
-      {/* <TopNavigation /> */}
+      {/* { <TopNavigation /> } */}
       <div className="content-list">
-        <h1 className="content-title">{title}</h1>
+        <h1 className="content-title">{title}</h1>      
+        {/* <Search 
+          icon={FaSearch}
+          placeholder="Search for a grant..."
+          onChange={(event) => {
+            setSearchKey(event.target.value);
+          }}          
+        />
+        {grants.filter((val)=>{
+          if (searchKey==""){
+            return val
+          }else if(val.grantName.toLowerCase().includes(searchKey.toLowerCase())) {
+            return val
+          }
+        }).map((val, key) => {
+          return (
+          <div className="gooby" key={key}>
+            <p>{val.grantName}</p>
+          </div>
+          );
+        })
+        }         */}
         <GrantTable />
       </div>
     </div>
@@ -120,12 +145,24 @@ export const grants = [
   },
 ];
 
+
+
+
+
 const GrantTable: React.FC = () => {
+  const [searchKey, setSearchKey] = useState('');
   return (
     <div className="flex flex-col">
       <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
         <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
           <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+            <Search 
+              icon={FaSearch}
+              placeholder="Search for a grant..."
+              onChange={(event) => {
+                setSearchKey(event.target.value);
+              }}          
+            />
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
@@ -166,7 +203,20 @@ const GrantTable: React.FC = () => {
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {grants.map(grant => (
+              {/* <Search 
+                icon={FaSearch}
+                placeholder="Search for a grant..."
+                onChange={(event) => {
+                  setSearchKey(event.target.value);
+                }}          
+              /> */}
+              {grants.filter((val)=>{
+                if (searchKey==""){
+                  return val
+                }else if(val.grantName.toLowerCase().includes(searchKey.toLowerCase())) {
+                  return val
+                }
+                }).map(grant => (
                   <tr key={grant.id}>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
@@ -246,5 +296,46 @@ const GrantTable: React.FC = () => {
     </div>
   );
 };
+
+
+
+  
+
+  // const searchGrantName = useCallback(
+  //   async e=> {
+  //     e.preventDefault();
+  
+  
+      
+  //   },
+  //   [grantName], 
+    
+    
+  // );
+
+// const searchGrantName = useCallback(
+//   async e=> {
+//     e.preventDefault();
+
+//     var result = getFields(objArray, "foo");
+//     const response = await api.get('grants', {
+//       params: {
+//         grant.grantName
+//       },
+//     });
+
+//     setGrants(
+//       response.data.filter(
+//         (grant: Grant) => grant.grantName === grantName,
+        
+//       ),
+//     );  
+//   },
+//   [grantName], 
+// );
+
+function searchGrantName(a:string) {
+  console.log("goob");   
+}
 
 export default Home;
