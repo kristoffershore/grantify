@@ -1,6 +1,4 @@
 import React, { useCallback, FormEvent, useState, useEffect } from 'react';
-import { FaSearch, FaRegBell, FaUserCircle } from 'react-icons/fa';
-
 import PageHeader from '../../components/PageHeader';
 import ListSelect from '../../components/ListSelect';
 import { Container, Form } from './styles';
@@ -8,7 +6,6 @@ import api from '../../services/api';
 import Placeholder from '../../components/Placeholder';
 import ListInput from '../../components/ListInput';
 import GrantCard from '../../components/GrantCard';
-import Input from '../../components/Input';
 
 export type Grant = {
   id: string;
@@ -21,7 +18,6 @@ export type Grant = {
   sponsorName: string;
   sponsorUrl: string;
 };
-
 
 const GrantList: React.FC = () => {
   const [grants, setGrants] = useState<Grant[]>([]);
@@ -39,38 +35,31 @@ const GrantList: React.FC = () => {
       });
 
       setGrants(
-        response.data.filter(
-          (grant: Grant) => grant.grantName === grantName,
-          
-        ),
-      );  
-    },
-    [grantName], 
-    
-    
-  );
-
-  const searchGrantSponsor = useCallback(
-    async (e: FormEvent) => {
-      e.preventDefault();
-
-      const response = await api.get('grants', {
-        params: {
-          sponsorName,
-        },
-      });
-
-      setGrants(
-        response.data.filter(
-          (grant: Grant) => grant.sponsorName === sponsorName,
-          
-        ),
+        response.data.filter((grant: Grant) => grant.grantName === grantName),
       );
     },
-     
-    [sponsorName]
-    
+    [grantName],
   );
+
+  // const searchGrantSponsor = useCallback(
+  //   async (e: FormEvent) => {
+  //     e.preventDefault();
+
+  //     const response = await api.get('grants', {
+  //       params: {
+  //         sponsorName,
+  //       },
+  //     });
+
+  //     setGrants(
+  //       response.data.filter(
+  //         (grant: Grant) => grant.sponsorName === sponsorName,
+  //       ),
+  //     );
+  //   },
+
+  //   [sponsorName],
+  // );
 
   useEffect(() => {
     api.get('grants').then(response => setGrants(response.data));
@@ -79,14 +68,15 @@ const GrantList: React.FC = () => {
   return (
     <Container>
       <PageHeader title="Grants">
-      <Form onSubmit={searchGrantName}>
-
-        { <ListInput
-            name="grantName"
-            label="Grant Name"
-            type="text"
-            onChange={e => setGrantName(e.target.value)}
-          /> }
+        <Form onSubmit={searchGrantName}>
+          {
+            <ListInput
+              name="grantName"
+              label="Grant Name"
+              type="text"
+              onChange={e => setGrantName(e.target.value)}
+            />
+          }
 
           <ListSelect
             name="status"
@@ -98,7 +88,7 @@ const GrantList: React.FC = () => {
               { value: 'Invalid', label: 'Invalid' },
             ]}
             onChange={e => setSponsorName(e.target.value)}
-          /> 
+          />
 
           <ListInput
             name="Open Date"
@@ -107,12 +97,14 @@ const GrantList: React.FC = () => {
             onChange={e => console.log(e)}
           />
 
-          { <ListInput
-            name="sponsorName"
-            label="Sponsor Name"
-            type="text"
-            onChange={e => setSponsorName(e.target.value)}
-          /> }
+          {
+            <ListInput
+              name="sponsorName"
+              label="Sponsor Name"
+              type="text"
+              onChange={e => setSponsorName(e.target.value)}
+            />
+          }
 
           <button type="submit">Search</button>
         </Form>

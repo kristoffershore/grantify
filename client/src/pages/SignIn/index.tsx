@@ -9,12 +9,11 @@ import { useAuth } from '../../hooks/auth';
 import { useToast } from '../../hooks/toast';
 import getValidationErrors from '../../utils/getValidationErrors';
 
-import logoImg from '../../assets/logo-up-md-green.svg';
-
 import Input from '../../components/Input';
 import Button from '../../components/Button';
 
 import { Container, Content, AnimationContainer, Background } from './styles';
+import { FaFire } from 'react-icons/fa';
 
 interface SignInFormData {
   email: string;
@@ -75,7 +74,9 @@ const SignIn: React.FC = () => {
     <Container>
       <Content>
         <AnimationContainer>
-          <img src={logoImg} alt="Grantify" />
+          <div className="sidebar-icon group bg-white text-secondary">
+            <FaFire size="80" />
+          </div>
 
           <Form ref={formRef} onSubmit={handleSubmit}>
             <h1>Sign in</h1>

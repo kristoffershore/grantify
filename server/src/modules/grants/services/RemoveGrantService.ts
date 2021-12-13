@@ -1,8 +1,8 @@
 import { inject, injectable } from 'tsyringe';
 
-import AppError from '@common/errors/AppError';
 import IGrantsRepository from '../infra/db/repositories/interfaces/IGrantsRepository';
 import Grant from '../infra/db/entities/Grant';
+import AppError from '../../../common/errors/AppError';
 
 interface IRequest {
   id: string;

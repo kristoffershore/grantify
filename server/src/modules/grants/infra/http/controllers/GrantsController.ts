@@ -2,11 +2,11 @@ import { Request, Response } from 'express';
 import { container } from 'tsyringe';
 import { classToClass } from 'class-transformer';
 
-import CreateGrantService from '@modules/grants/services/CreateGrantService';
-import ListGrantsService from '@modules/grants/services/ListGrantsService';
-import RemoveGrantService from '@modules/grants/services/RemoveGrantService';
-import ShowGrantService from '@modules/grants/services/ShowGrantService';
-import UpdateGrantService from '@modules/grants/services/UpdateGrantService';
+import CreateGrantService from '../../../../../modules/grants/services/CreateGrantService';
+import ListGrantsService from '../../../../../modules/grants/services/ListGrantsService';
+import RemoveGrantService from '../../../../../modules/grants/services/RemoveGrantService';
+import ShowGrantService from '../../../../../modules/grants/services/ShowGrantService';
+import UpdateGrantService from '../../../../../modules/grants/services/UpdateGrantService';
 
 export default class GrantsController {
   public async index(request: Request, response: Response): Promise<Response> {
@@ -18,11 +18,11 @@ export default class GrantsController {
   }
 
   public async show(request: Request, response: Response): Promise<Response> {
-    const { grantName } = request.body;
+    const { id } = request.params;
 
     const showGrantByName = container.resolve(ShowGrantService);
 
-    const grant = await showGrantByName.execute({ grantName });
+    const grant = await showGrantByName.execute({ grantId: id });
 
     return response.json(grant);
   }
@@ -37,6 +37,8 @@ export default class GrantsController {
       amountApproved,
       sponsorName,
       sponsorUrl,
+      dateWhenFundsWereReceived,
+      expirationDate,
     } = request.body;
 
     const createGrant = container.resolve(CreateGrantService);
@@ -50,6 +52,8 @@ export default class GrantsController {
       amountApproved,
       sponsorName,
       sponsorUrl,
+      dateWhenFundsWereReceived,
+      expirationDate,
     });
 
     return response.json(classToClass(grant));
@@ -66,6 +70,8 @@ export default class GrantsController {
       amountApproved,
       sponsorName,
       sponsorUrl,
+      dateWhenFundsWereReceived,
+      expirationDate,
     } = request.body;
 
     const updateGrant = container.resolve(UpdateGrantService);
@@ -80,6 +86,8 @@ export default class GrantsController {
       amountApproved,
       sponsorName,
       sponsorUrl,
+      dateWhenFundsWereReceived,
+      expirationDate,
     });
 
     return response.json(grant);

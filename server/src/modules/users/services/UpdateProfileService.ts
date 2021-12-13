@@ -1,13 +1,14 @@
 import { inject, injectable } from 'tsyringe';
 
-import User from '@modules/users/infra/db/entities/User';
-import AppError from '@common/errors/AppError';
 import IHashProvider from '../providers/HashProvider/interfaces/IHashProvider';
 import IUsersRepository from '../infra/db/repositories/interfaces/IUsersRepository';
+import AppError from '../../../common/errors/AppError';
+import User from '../infra/db/entities/User';
 
 interface IRequest {
   userId: string;
-  name: string;
+  first_name: string;
+  last_name: string;
   email: string;
   old_password?: string;
   password?: string;
@@ -25,7 +26,8 @@ class UpdateProfileService {
 
   public async execute({
     userId,
-    name,
+    first_name,
+    last_name,
     email,
     password,
     old_password,
@@ -42,7 +44,8 @@ class UpdateProfileService {
       throw new AppError('Email already in use.');
     }
 
-    user.name = name;
+    user.firstName = first_name;
+    user.lastName = last_name;
     user.email = email;
 
     if (password && !old_password) {

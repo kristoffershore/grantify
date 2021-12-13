@@ -1,8 +1,8 @@
 import { inject, injectable } from 'tsyringe';
 
-import AppError from '@common/errors/AppError';
 import IGrantsRepository from '../infra/db/repositories/interfaces/IGrantsRepository';
 import Grant from '../infra/db/entities/Grant';
+import AppError from '../../../common/errors/AppError';
 
 interface IRequest {
   id: string;
@@ -14,6 +14,8 @@ interface IRequest {
   amountApproved?: number;
   sponsorName?: string;
   sponsorUrl?: string;
+  dateWhenFundsWereReceived?: Date;
+  expirationDate?: Date;
 }
 
 @injectable()
@@ -33,6 +35,8 @@ export default class UpdateGrantService {
     amountApproved,
     sponsorName,
     sponsorUrl,
+    dateWhenFundsWereReceived,
+    expirationDate,
   }: IRequest): Promise<Grant | undefined> {
     const grant = await this.grantsRepository.findById(id);
 
@@ -48,6 +52,9 @@ export default class UpdateGrantService {
     amountApproved && (grant.amountApproved = amountApproved);
     sponsorName && (grant.sponsorName = sponsorName);
     sponsorUrl && (grant.sponsorUrl = sponsorUrl);
+    dateWhenFundsWereReceived &&
+      (grant.dateWhenFundsWereReceived = dateWhenFundsWereReceived);
+    expirationDate && (grant.expirationDate = expirationDate);
 
     await this.grantsRepository.save(grant);
 

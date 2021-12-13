@@ -1,5 +1,4 @@
-import AppError from '@common/errors/AppError';
-
+import AppError from '../../../common/errors/AppError';
 import FakeUsersRepository from '../infra/db/repositories/fakes/FakeUsersRepository';
 import FakeHashProvider from '../providers/HashProvider/fakes/FakeHashProvider';
 import CreateUserService from './CreateUserService';
@@ -18,7 +17,8 @@ describe('CreateUser', () => {
 
   it('should be able to create a new user', async () => {
     const user = await createUser.execute({
-      name: 'John Doe',
+      firstName: 'John',
+      lastName: 'Doe',
       email: 'johndoe@example.com',
       password: '123123',
     });
@@ -28,14 +28,16 @@ describe('CreateUser', () => {
 
   it('should not be able to create a new user with an email that is already in use', async () => {
     await createUser.execute({
-      name: 'John Doe',
+      firstName: 'John',
+      lastName: 'Doe',
       email: 'johndoe@example.com',
       password: '123123',
     });
 
     await expect(
       createUser.execute({
-        name: 'Barry Allen',
+        firstName: 'John',
+        lastName: 'Doe',
         email: 'johndoe@example.com',
         password: 'starlabs',
       }),

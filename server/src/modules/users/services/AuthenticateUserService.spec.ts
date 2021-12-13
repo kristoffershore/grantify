@@ -1,5 +1,4 @@
-import AppError from '@common/errors/AppError';
-
+import AppError from '../../../common/errors/AppError';
 import FakeUsersRepository from '../infra/db/repositories/fakes/FakeUsersRepository';
 import FakeHashProvider from '../providers/HashProvider/fakes/FakeHashProvider';
 import AuthenticateUserService from './AuthenticateUserService';
@@ -23,7 +22,8 @@ describe('AuthenticateUser', () => {
 
   it('should be able to authenticate', async () => {
     const user = await createUser.execute({
-      name: 'Barry Allen',
+      firstName: 'John',
+      lastName: 'Doe',
       email: 'ballen@starlabs.com',
       password: '123456',
     });
@@ -48,7 +48,8 @@ describe('AuthenticateUser', () => {
 
   it('should not authenticate user with wrong password', async () => {
     await createUser.execute({
-      name: 'Barry Allen',
+      firstName: 'John',
+      lastName: 'Doe',
       email: 'ballen@starlabs.com',
       password: '123456',
     });

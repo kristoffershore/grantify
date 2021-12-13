@@ -1,11 +1,5 @@
-import {
-  BsPlus,
-  BsPower,
-  BsClipboardData,
-  BsPeopleFill,
-  BsGear,
-} from 'react-icons/bs';
-import { FaCalendar, FaFire } from 'react-icons/fa';
+import { BsPlus, BsPower, BsClipboardData, BsGear } from 'react-icons/bs';
+import { FaFire } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
 const SideBar: React.FC<{ signOut(): void }> = ({ signOut }) => {
@@ -21,15 +15,17 @@ const SideBar: React.FC<{ signOut(): void }> = ({ signOut }) => {
         <Divider />
       </div>
       <div className="flex-auto">
-        <SideBarIcon icon={<BsPlus size="32" />} text="Add a new grant" />
-        <Link to="/grants/:id">
+        <Link to="/grants/add">
+          <SideBarIcon icon={<BsPlus size="32" />} text="Add a new grant" />
+        </Link>
+        <Link to="/grants">
           <SideBarIcon icon={<BsClipboardData size="20" />} text="Grants" />
         </Link>
         {/* <SideBarIcon icon={<FaCalendar size="20" />} text="Calendar" /> */}
         {/* <SideBarIcon icon={<BsPeopleFill size="20" />} text="Grantors" /> */}
-        <Link to="/users">
+        {/* <Link to="/users">
           <SideBarIcon icon={<BsPeopleFill size="20" />} text="Users" />
-        </Link>
+        </Link> */}
       </div>
       <div className="flex-end">
         <Link to="/profile">

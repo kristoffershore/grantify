@@ -1,4 +1,4 @@
-import AppError from '@common/errors/AppError';
+import AppError from '../../../common/errors/AppError';
 import FakeGrantsRepository from '../infra/db/repositories/fakes/FakeGrantsRepository';
 import ShowGrantService from './ShowGrantService';
 
@@ -12,7 +12,7 @@ describe('ShowGrant', () => {
     showGrant = new ShowGrantService(fakeGrantsRepository);
   });
 
-  it('should be able to show a grant based on ID', async () => {
+  it('should be able to show a grant based on its id', async () => {
     const g = await fakeGrantsRepository.create({
       grantName: 'COVID Grant Fall 2021',
       openDate: new Date('2021-10-18T03:24:00'),
@@ -22,6 +22,8 @@ describe('ShowGrant', () => {
       amountApproved: 1000.0,
       sponsorName: 'UNF',
       sponsorUrl: 'www.unf.edu',
+      dateWhenFundsWereReceived: new Date('2021-10-21T03:24:00'),
+      expirationDate: new Date('2021-12-30T03:24:00'),
     });
 
     await fakeGrantsRepository.create({
@@ -33,14 +35,16 @@ describe('ShowGrant', () => {
       amountApproved: 1500.34,
       sponsorName: 'USF',
       sponsorUrl: 'www.unf.edu',
+      dateWhenFundsWereReceived: new Date('2021-10-21T03:24:00'),
+      expirationDate: new Date('2021-12-30T03:24:00'),
     });
 
-    const grant = await showGrant.execute({ grantName: g.grantName });
+    const grant = await showGrant.execute({ grantId: g.id });
 
-    expect(grant?.grantName).toEqual(g.grantName);
+    expect(grant?.id).toEqual(g.id);
   });
 
-  it('should not show a grant whose name does not exist', async () => {
+  it('should not show a grant whose id does not exist', async () => {
     await fakeGrantsRepository.create({
       grantName: 'SG Grant Fall 2021',
       openDate: new Date('2021-10-18T03:24:00'),
@@ -50,10 +54,12 @@ describe('ShowGrant', () => {
       amountApproved: 1500.34,
       sponsorName: 'USF',
       sponsorUrl: 'www.unf.edu',
+      dateWhenFundsWereReceived: new Date('2021-10-21T03:24:00'),
+      expirationDate: new Date('2021-12-30T03:24:00'),
     });
 
     await expect(
-      showGrant.execute({ grantName: 'la1234' }),
+      showGrant.execute({ grantId: '123456' }),
     ).rejects.toBeInstanceOf(AppError);
   });
 });

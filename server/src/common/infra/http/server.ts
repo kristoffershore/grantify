@@ -6,11 +6,11 @@ import cors from 'cors';
 import { errors } from 'celebrate';
 import 'express-async-errors';
 
-import AppError from '@common/errors/AppError';
+import AppError from '../../../common/errors/AppError';
 import routes from './routes';
 
-import '@common/infra/db';
-import '@common/container';
+import '../../../common/infra/db';
+import '../../../common/container';
 
 const app = express();
 

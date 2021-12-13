@@ -7,4 +7,6 @@ export default interface ICreateGrantDTO {
   amountApproved: number;
   sponsorName: string;
   sponsorUrl: string;
+  dateWhenFundsWereReceived: Date;
+  expirationDate: Date;
 }

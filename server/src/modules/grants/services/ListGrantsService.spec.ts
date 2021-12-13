@@ -1,6 +1,4 @@
-import AppError from '@common/errors/AppError';
 import FakeGrantsRepository from '../infra/db/repositories/fakes/FakeGrantsRepository';
-import CreateGrantService from './CreateGrantService';
 import ListGrantService from './ListGrantsService';
 
 let fakeGrantsRepository: FakeGrantsRepository;
@@ -23,6 +21,8 @@ describe('ListGrants', () => {
       amountApproved: 1000.0,
       sponsorName: 'UNF',
       sponsorUrl: 'www.unf.edu',
+      dateWhenFundsWereReceived: new Date('2021-10-21T03:24:00'),
+      expirationDate: new Date('2021-12-30T03:24:00'),
     });
 
     await fakeGrantsRepository.create({
@@ -34,6 +34,8 @@ describe('ListGrants', () => {
       amountApproved: 1500.34,
       sponsorName: 'USF',
       sponsorUrl: 'www.unf.edu',
+      dateWhenFundsWereReceived: new Date('2021-10-21T03:24:00'),
+      expirationDate: new Date('2021-12-30T03:24:00'),
     });
 
     const grants = await listGrant.findBySponsorName({ sponsorName: 'UNF' });
@@ -58,6 +60,8 @@ describe('ListGrants', () => {
       amountApproved: 1000.0,
       sponsorName: 'UNF',
       sponsorUrl: 'www.unf.edu',
+      dateWhenFundsWereReceived: new Date('2021-10-21T03:24:00'),
+      expirationDate: new Date('2021-12-30T03:24:00'),
     });
 
     await fakeGrantsRepository.create({
@@ -69,22 +73,17 @@ describe('ListGrants', () => {
       amountApproved: 1500.34,
       sponsorName: 'USF',
       sponsorUrl: 'www.unf.edu',
+      dateWhenFundsWereReceived: new Date('2021-10-21T03:24:00'),
+      expirationDate: new Date('2021-12-30T03:24:00'),
     });
 
-    const grants = await listGrant.findByGrantName({ grantName: 'COVID Grant Fall 2021' });
+    const grant = await listGrant.findByGrantName({
+      grantName: 'COVID Grant Fall 2021',
+    });
 
-    expect(grants).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({
-          grantName: expect.stringMatching('UNF'),
-        }),
-      ]),
-    );
-    expect(grants).toHaveLength(1);
+    expect(grant?.sponsorName).toEqual('UNF');
   });
 
-
-  
   it('should be able to list all grants', async () => {
     await fakeGrantsRepository.create({
       grantName: 'COVID Grant Fall 2021',
@@ -95,6 +94,8 @@ describe('ListGrants', () => {
       amountApproved: 1000.0,
       sponsorName: 'UNF',
       sponsorUrl: 'www.unf.edu',
+      dateWhenFundsWereReceived: new Date('2021-10-21T03:24:00'),
+      expirationDate: new Date('2021-12-30T03:24:00'),
     });
 
     await fakeGrantsRepository.create({
@@ -106,6 +107,8 @@ describe('ListGrants', () => {
       amountApproved: 1500.34,
       sponsorName: 'USF',
       sponsorUrl: 'www.unf.edu',
+      dateWhenFundsWereReceived: new Date('2021-10-21T03:24:00'),
+      expirationDate: new Date('2021-12-30T03:24:00'),
     });
 
     const grants = await listGrant.findAll();

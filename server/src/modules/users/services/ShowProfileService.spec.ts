@@ -1,5 +1,4 @@
-import AppError from '@common/errors/AppError';
-
+import AppError from '../../../common/errors/AppError';
 import FakeUsersRepository from '../infra/db/repositories/fakes/FakeUsersRepository';
 import ShowProfileService from './ShowProfileService';
 
@@ -15,7 +14,8 @@ describe('UpdateProfile', () => {
 
   it('should be able to show the profile', async () => {
     const user = await fakeUsersRepository.create({
-      name: 'Barry Allen',
+      firstName: 'John',
+      lastName: 'Doe',
       email: 'ballen@starlabs.com',
       password: '123456',
     });
@@ -24,7 +24,8 @@ describe('UpdateProfile', () => {
       userId: user.id,
     });
 
-    expect(profile.name).toBe('Barry Allen');
+    expect(profile.firstName).toBe('John');
+    expect(profile.lastName).toBe('Doe');
     expect(profile.email).toBe('ballen@starlabs.com');
   });
 

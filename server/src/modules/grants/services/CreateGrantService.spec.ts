@@ -1,4 +1,4 @@
-import AppError from '@common/errors/AppError';
+import AppError from '../../../common/errors/AppError';
 import FakeGrantsRepository from '../infra/db/repositories/fakes/FakeGrantsRepository';
 import CreateGrantService from './CreateGrantService';
 
@@ -22,6 +22,8 @@ describe('CreateGrant', () => {
       amountApproved: 1000.0,
       sponsorName: 'UNF',
       sponsorUrl: 'www.unf.edu',
+      dateWhenFundsWereReceived: new Date('2021-10-21T03:24:00'),
+      expirationDate: new Date('2021-12-30T03:24:00'),
     });
 
     const grant2 = await createGrant.execute({
@@ -33,6 +35,8 @@ describe('CreateGrant', () => {
       amountApproved: 1000.0,
       sponsorName: 'UNF',
       sponsorUrl: 'www.unf.edu',
+      dateWhenFundsWereReceived: new Date('2021-10-21T03:24:00'),
+      expirationDate: new Date('2021-12-30T03:24:00'),
     });
 
     expect(grant1).toHaveProperty('id');
@@ -49,6 +53,8 @@ describe('CreateGrant', () => {
       amountApproved: 1000.0,
       sponsorName: 'UNF',
       sponsorUrl: 'www.unf.edu',
+      dateWhenFundsWereReceived: new Date('2021-10-21T03:24:00'),
+      expirationDate: new Date('2021-12-30T03:24:00'),
     });
 
     await expect(
@@ -61,6 +67,8 @@ describe('CreateGrant', () => {
         amountApproved: 1500.0,
         sponsorName: 'USF',
         sponsorUrl: 'www.usf.edu',
+        dateWhenFundsWereReceived: new Date('2021-10-21T03:24:00'),
+        expirationDate: new Date('2021-12-30T03:24:00'),
       }),
     ).rejects.toBeInstanceOf(AppError);
   });

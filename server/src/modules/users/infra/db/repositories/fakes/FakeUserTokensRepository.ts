@@ -1,7 +1,6 @@
 import { v4 as uuid } from 'uuid';
+import UserToken from '../../entities/UserToken';
 
-import UserToken from '@modules/users/infra/db/entities/UserToken';
-import AppError from '@common/errors/AppError';
 import IUserTokensRepository from '../interfaces/IUserTokensRepository';
 
 class FakeUserTokensRepository implements IUserTokensRepository {

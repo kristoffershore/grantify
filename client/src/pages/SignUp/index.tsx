@@ -11,15 +11,15 @@ import { useToast } from '../../hooks/toast';
 
 import getValidationErrors from '../../utils/getValidationErrors';
 
-import logoImg from '../../assets/logo-up-md-green.svg';
-
 import Input from '../../components/Input';
 import Button from '../../components/Button';
 
 import { Container, Content, AnimationContainer, Background } from './styles';
+import { FaFire } from 'react-icons/fa';
 
 interface SignUpFormData {
-  name: string;
+  first_name: string;
+  last_name: string;
   email: string;
   password: string;
 }
@@ -35,7 +35,8 @@ const SignUp: React.FC = () => {
         formRef.current?.setErrors({});
 
         const schema = Yup.object().shape({
-          name: Yup.string().required('Name mandatory'),
+          first_name: Yup.string().required('First name mandatory'),
+          last_name: Yup.string().required('Last name mandatory'),
           email: Yup.string()
             .email('Insert a valid email')
             .required('E-mail mandatory'),
@@ -80,12 +81,15 @@ const SignUp: React.FC = () => {
       <Background />
       <Content>
         <AnimationContainer>
-          <img src={logoImg} alt="Grantify" />
+          <div className="sidebar-icon group bg-white text-secondary">
+            <FaFire size="80" />
+          </div>
 
           <Form ref={formRef} onSubmit={handleSubmit}>
             <h1>Register</h1>
 
-            <Input name="name" icon={FiUser} placeholder="Name" />
+            <Input name="first_name" icon={FiUser} placeholder="First Name" />
+            <Input name="last_name" icon={FiUser} placeholder="Last Name" />
 
             <Input name="email" icon={FiMail} placeholder="Email" />
 

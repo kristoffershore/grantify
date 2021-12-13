@@ -1,5 +1,4 @@
-import AppError from '@common/errors/AppError';
-
+import AppError from '../../../common/errors/AppError';
 import FakeUsersRepository from '../infra/db/repositories/fakes/FakeUsersRepository';
 import FakeUserTokensRepository from '../infra/db/repositories/fakes/FakeUserTokensRepository';
 import FakeHashProvider from '../providers/HashProvider/fakes/FakeHashProvider';
@@ -27,7 +26,8 @@ describe('ResetPasswordService', () => {
 
   it('should be able to reset the password', async () => {
     const user = await fakeUsersRepository.create({
-      name: 'John Doe',
+      firstName: 'John',
+      lastName: 'Doe',
       email: 'johndoe@example.com',
       password: '123456',
     });
@@ -71,7 +71,8 @@ describe('ResetPasswordService', () => {
 
   it('should not be able to reset password if two or more hours have passed', async () => {
     const user = await fakeUsersRepository.create({
-      name: 'John Doe',
+      firstName: 'John',
+      lastName: 'Doe',
       email: 'johndoe@example.com',
       password: '123456',
     });

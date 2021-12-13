@@ -1,9 +1,8 @@
-import AppError from '@common/errors/AppError';
-
 import FakeUsersRepository from '../infra/db/repositories/fakes/FakeUsersRepository';
-import FakeMailProvider from '@common/container/providers/MailProvider/fakes/FakeMailProvider';
 import SendForgotPasswordEmailService from './SendForgotPasswordEmailService';
 import FakeUserTokensRepository from '../infra/db/repositories/fakes/FakeUserTokensRepository';
+import FakeMailProvider from '../../../common/container/providers/MailProvider/fakes/FakeMailProvider';
+import AppError from '../../../common/errors/AppError';
 
 let fakeUsersRepository: FakeUsersRepository;
 let fakeMailProvider: FakeMailProvider;
@@ -27,7 +26,8 @@ describe('SendForgotPasswordEmail', () => {
     const sendMail = jest.spyOn(fakeMailProvider, 'sendMail');
 
     await fakeUsersRepository.create({
-      name: 'Barry Allen',
+      firstName: 'John',
+      lastName: 'Doe',
       email: 'ballen@starlabs.com',
       password: '123456',
     });
@@ -51,7 +51,8 @@ describe('SendForgotPasswordEmail', () => {
     const generateToken = jest.spyOn(fakeUserTokensRepository, 'generate');
 
     const user = await fakeUsersRepository.create({
-      name: 'Barry Allen',
+      firstName: 'John',
+      lastName: 'Doe',
       email: 'ballen@starlabs.com',
       password: '123456',
     });

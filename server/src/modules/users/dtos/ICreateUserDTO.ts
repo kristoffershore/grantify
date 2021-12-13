@@ -1,5 +1,6 @@
 export default interface ICreateUserDTO {
-  name: string;
+  firstName: string;
+  lastName: string;
   email: string;
   password: string;
 }

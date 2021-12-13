@@ -1,10 +1,10 @@
 import { inject, injectable } from 'tsyringe';
 import path from 'path';
 
-import AppError from '@common/errors/AppError';
-import IMailProvider from '@common/container/providers/MailProvider/interfaces/IMailProvider';
 import IUserTokensRepository from '../infra/db/repositories/interfaces/IUserTokensRepository';
 import IUsersRepository from '../infra/db/repositories/interfaces/IUsersRepository';
+import IMailProvider from '../../../common/container/providers/MailProvider/interfaces/IMailProvider';
+import AppError from '../../../common/errors/AppError';
 
 interface IRequest {
   email: string;
@@ -41,14 +41,14 @@ class SendForgotPasswordEmailService {
 
     await this.mailProvider.sendMail({
       to: {
-        name: user.name,
+        name: user.firstName,
         email: user.email,
       },
       subject: '[Grantify] Password recovery',
       templateData: {
         file: forgotPasswordTemplate,
         variables: {
-          name: user.name,
+          name: user.firstName,
           link: `${process.env.APP_WEB_URL}/reset-password?token=${token}`,
         },
       },

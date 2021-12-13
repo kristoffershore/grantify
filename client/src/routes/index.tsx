@@ -9,11 +9,11 @@ import SignUp from '../pages/SignUp';
 import ForgotPassword from '../pages/ForgotPassword';
 import ResetPassword from '../pages/ResetPassword';
 import GrantView from '../pages/GrantView';
-import GrantList from '../pages/GrantList';
 import Home from '../pages/Home';
 import Profile from '../pages/Profile';
-import UserTable from '../pages/UserTable';
 import PermissionBoard from '../pages/PermissionBoard';
+import UserBoard from '../pages/UserBoard';
+import GrantForm from '../pages/GrantForm';
 
 const Routes: React.FC = () => {
   return (
@@ -24,11 +24,12 @@ const Routes: React.FC = () => {
       <Route path="/reset-password" component={ResetPassword} />
 
       <Route path="/home" component={Home} isPrivate />
-      <Route path="/grants" exact component={GrantList} isPrivate />
-      <Route path="/grants/:id" component={GrantView} isPrivate />
-      <Route path="/users" exact component={UserTable} isPrivate />
-      <Route path="/users/:id/edit" component={PermissionBoard} isPrivate />
-      {/* <Route path="/dashboard/grants/new" component={GrantForm} isPrivate /> */}
+      <Route path="/grants" exact component={Home} isPrivate />
+      <Route path="/grants/view/:id" exact component={GrantView} isPrivate />
+      <Route path="/grants/add" exact component={GrantForm} isPrivate />
+      <Route path="/grants/edit/:id" exact component={GrantForm} isPrivate />
+      <Route path="/users" exact component={UserBoard} isPrivate />
+      <Route path="/users/:id" component={PermissionBoard} isPrivate />
       {/* <Route
         path="/dashboard/grants/:id/edit"
         component={GrantForm}

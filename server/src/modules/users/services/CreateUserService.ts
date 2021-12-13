@@ -1,12 +1,13 @@
 import { inject, injectable } from 'tsyringe';
 
-import AppError from '@common/errors/AppError';
-import User from '@modules/users/infra/db/entities/User';
 import IHashProvider from '../providers/HashProvider/interfaces/IHashProvider';
 import IUsersRepository from '../infra/db/repositories/interfaces/IUsersRepository';
+import AppError from '../../../common/errors/AppError';
+import User from '../infra/db/entities/User';
 
 interface IRequest {
-  name: string;
+  firstName: string;
+  lastName: string;
   email: string;
   password: string;
 }
@@ -21,7 +22,12 @@ class CreateUserService {
     private hashProvider: IHashProvider,
   ) {}
 
-  public async execute({ name, email, password }: IRequest): Promise<User> {
+  public async execute({
+    firstName,
+    lastName,
+    email,
+    password,
+  }: IRequest): Promise<User> {
     const checkUserExists = await this.usersRepository.findByEmail(email);
 
     if (checkUserExists) {
@@ -31,7 +37,8 @@ class CreateUserService {
     const hashedPassword = await this.hashProvider.generateHash(password);
 
     const user = await this.usersRepository.create({
-      name,
+      firstName,
+      lastName,
       email,
       password: hashedPassword,
     });

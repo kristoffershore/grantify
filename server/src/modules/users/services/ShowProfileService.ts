@@ -1,7 +1,7 @@
 import { inject, injectable } from 'tsyringe';
+import AppError from '../../../common/errors/AppError';
+import User from '../infra/db/entities/User';
 
-import User from '@modules/users/infra/db/entities/User';
-import AppError from '@common/errors/AppError';
 import IUsersRepository from '../infra/db/repositories/interfaces/IUsersRepository';
 
 interface IRequest {

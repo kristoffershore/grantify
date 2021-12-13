@@ -14,7 +14,8 @@ import api from '../../services/api';
 import getValidationErrors from '../../utils/getValidationErrors';
 
 interface ProfileFormData {
-  name: string;
+  first_name: string;
+  last_name: string;
   email: string;
   old_password: string;
   password: string;
@@ -56,7 +57,8 @@ const ProfileSection: React.FC = () => {
         formRef.current?.setErrors({});
 
         const schema = Yup.object().shape({
-          name: Yup.string().required('Name mandatory'),
+          first_name: Yup.string().required('First name mandatory'),
+          last_name: Yup.string().required('Last name mandatory'),
           email: Yup.string()
             .email('Insert a valid email')
             .required('E-mail mandatory'),
@@ -79,11 +81,18 @@ const ProfileSection: React.FC = () => {
           abortEarly: false,
         });
 
-        const { name, email, old_password, password, password_confirmation } =
-          data;
+        const {
+          first_name,
+          last_name,
+          email,
+          old_password,
+          password,
+          password_confirmation,
+        } = data;
 
         const formData = {
-          name,
+          first_name,
+          last_name,
           email,
           ...(data.old_password
             ? {
@@ -129,14 +138,21 @@ const ProfileSection: React.FC = () => {
     <Form
       ref={formRef}
       initialData={{
-        name: user.name,
+        first_name: user.firstName,
+        last_name: user.lastName,
         email: user.email,
       }}
       onSubmit={handleSubmit}
     >
-      <Input name="name" icon={FiUser} placeholder="Name" />
+      <Input
+        name="first_name"
+        icon={FiUser}
+        placeholder="First name"
+        disabled
+      />
+      <Input name="last_name" icon={FiUser} placeholder="Last name" disabled />
 
-      <Input name="email" icon={FiMail} placeholder="E-mail" />
+      <Input name="email" icon={FiMail} placeholder="E-mail" disabled />
 
       <Input
         containerStyle={{ marginTop: 24 }}

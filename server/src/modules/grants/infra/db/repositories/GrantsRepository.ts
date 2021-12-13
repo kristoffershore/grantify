@@ -1,4 +1,4 @@
-import ICreateGrantDTO from '@modules/grants/dtos/ICreateGrantDTO';
+import ICreateGrantDTO from '../../../../../modules/grants/dtos/ICreateGrantDTO';
 import { getRepository, Repository } from 'typeorm';
 import Grant from '../entities/Grant';
 
@@ -12,11 +12,7 @@ export default class GrantsRepository implements IGrantsRepository {
   }
 
   public async findById(id: string): Promise<Grant | undefined> {
-    const grant = await this.ormRepository.findOne({
-      where: {
-        id,
-      },
-    });
+    const grant = await this.ormRepository.findOne(id);
 
     return grant;
   }
@@ -27,14 +23,14 @@ export default class GrantsRepository implements IGrantsRepository {
     return grants;
   }
 
-  public async findByGrantName(grantName: string): Promise<Grant[]> {
-    const grants = await this.ormRepository.find({
+  public async findByGrantName(grantName: string): Promise<Grant | undefined> {
+    const grant = await this.ormRepository.findOne({
       where: {
         grantName,
       },
     });
 
-    return grants;
+    return grant;
   }
 
   public async findAllBySponsorName(sponsorName: string): Promise<Grant[]> {

@@ -1,4 +1,4 @@
-import AppError from '@common/errors/AppError';
+import AppError from '../../../common/errors/AppError';
 import FakeGrantsRepository from '../infra/db/repositories/fakes/FakeGrantsRepository';
 import UpdateGrantService from './UpdateGrantService';
 
@@ -22,6 +22,8 @@ describe('UpdateGrant', () => {
       amountApproved: 1000.0,
       sponsorName: 'UNF',
       sponsorUrl: 'www.unf.edu',
+      dateWhenFundsWereReceived: new Date('2021-10-21T03:24:00'),
+      expirationDate: new Date('2021-12-31T03:24:00'),
     });
 
     const updatedGrant = await updateGrant.execute({
@@ -34,6 +36,8 @@ describe('UpdateGrant', () => {
       amountApproved: 1900,
       sponsorName: 'USF',
       sponsorUrl: 'www.usf.edu',
+      dateWhenFundsWereReceived: new Date('2021-10-21T03:24:00'),
+      expirationDate: new Date('2021-12-31T03:24:00'),
     });
 
     expect(updatedGrant?.grantName).toBe('SG Grant');
@@ -50,6 +54,8 @@ describe('UpdateGrant', () => {
       amountApproved: 1000.0,
       sponsorName: 'UNF',
       sponsorUrl: 'www.unf.edu',
+      dateWhenFundsWereReceived: new Date('2021-10-21T03:24:00'),
+      expirationDate: new Date('2021-12-31T03:24:00'),
     });
 
     await expect(

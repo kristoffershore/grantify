@@ -15,20 +15,24 @@ export const Container = styled.div<ContainerProps>`
   display: flex;
   align-items: center;
   box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
+
   & + div {
     margin-top: 8px;
   }
+
   ${props =>
     props.isFocused &&
     css`
-      color: #69cf9c;
-      border-color: #69cf9c;
+      color: #4080ea;
+      border-color: #4080ea;
     `}
+
   ${props =>
     props.isFilled &&
     css`
-      color: #69cf9c;
+      color: #4080ea;
     `}
+
   input {
     flex: 1;
     background: transparent;
@@ -38,6 +42,7 @@ export const Container = styled.div<ContainerProps>`
       color: #666360;
     }
   }
+
   svg {
     margin-right: 16px;
   }

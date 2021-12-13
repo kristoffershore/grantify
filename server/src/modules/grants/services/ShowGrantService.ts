@@ -1,11 +1,11 @@
 import { inject, injectable } from 'tsyringe';
 
-import AppError from '@common/errors/AppError';
 import IGrantsRepository from '../infra/db/repositories/interfaces/IGrantsRepository';
 import Grant from '../infra/db/entities/Grant';
+import AppError from '../../../common/errors/AppError';
 
 interface IRequest {
-  grantName: string;
+  grantId: string;
 }
 
 @injectable()
@@ -15,11 +15,11 @@ export default class ShowGrantService {
     private grantsRepository: IGrantsRepository,
   ) {}
 
-  public async execute({ grantName }: IRequest): Promise<Grant | undefined> {
-    const grant = await this.grantsRepository.findByGrantName(grantName);
+  public async execute({ grantId }: IRequest): Promise<Grant | undefined> {
+    const grant = await this.grantsRepository.findById(grantId);
 
     if (!grant) {
-      throw new AppError('A grant with the given name does not exist.');
+      throw new AppError('A grant with the given ID does not exist.');
     }
 
     return grant;

@@ -1,54 +1,74 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { useAuth } from '../../hooks/auth';
 import SideBar from '../../components/SideBar';
-import TopNavigation from '../../components/TopNavigation';
 import { useParams } from 'react-router';
-import { grants } from '../Home';
-import dummy1 from '../../assets/dummy1.png';
-import dummy2 from '../../assets/dummy2.png';
+import api from '../../services/api';
+import { Grant } from '../../types/Grant';
 
 const GrantView: React.FC = () => {
-  const { signOut } = useAuth();
+  const [grant, setGrant] = useState<Grant>();
   const { id } = useParams<{ id: string }>();
+  const { signOut } = useAuth();
 
-  const findGrant = grants.find(grant => grant.id === Number(id));
+  useEffect(() => {
+    api.get(`grants/${id}`).then(response => setGrant(response.data));
+  }, [id]);
 
   return (
-    <div className="flex">
-      <SideBar signOut={signOut} />
-      <div className="content-container">
-        {/* <TopNavigation /> */}
-        <div className="content-list">
-          <h1 className="content-title">UNF Covid Grant</h1>
+    <>
+      {grant && (
+        <div className="flex">
+          <SideBar signOut={signOut} />
+          <div className="content-container">
+            <div className="content-list">
+              <h1 className="content-title">{grant.grantName}</h1>
 
-          <section className="grid grid-cols-3 gap-5">
-            <DataBox title={'Amount Requested'} data="2000.00" />
-            <DataBox title={'Amount Approved'} data="1000.00" />
-            <DataBox title={'Remaining Balance'} data="500.00" />
-            <DataBox title={'Open Date'} data="2021-10-19T00:00:00.000Z" />
-            <DataBox title={'Close Date'} data="2021-12-25T00:00:00.000Z" />
-            <DataBox
-              title={'Expiration Date'}
-              data="2022-12-31T00:00:00.000Z"
-            />
-            <DataBox
-              title={'Date When Funds Were Received'}
-              data="2021-12-01T00:00:00.000Z"
-            />
-            <DataBox
-              title={'Grantor'}
-              data="University of North Florida"
-              link="www.unf.edu"
-            />
-            <DataBox title={'Status'} data="Approved" />
-          </section>
-          {/* {findGrant && (
-            <h1 className="content-title">{findGrant.grantName}</h1>
-          )} */}
+              <section className="grid grid-cols-3 gap-5">
+                <DataBox
+                  title={'Amount Requested'}
+                  data={grant.amountRequested.toString()}
+                />
+                {grant.amountApproved && (
+                  <DataBox
+                    title={'Amount Approved'}
+                    data={grant.amountApproved.toString()}
+                  />
+                )}
+                {grant.amountApproved && grant.expenses && (
+                  <DataBox
+                    title={'Remaining Balance'}
+                    data={grant.amountApproved.toString()}
+                  />
+                )}
+                <DataBox title={'Open Date'} data={grant.openDate} />
+                <DataBox title={'Close Date'} data={grant.closeDate} />
+                {grant.expirationDate && (
+                  <DataBox
+                    title={'Expiration Date'}
+                    data={grant.expirationDate}
+                  />
+                )}
+                {grant.dateWhenFundsWereReceived && (
+                  <DataBox
+                    title={'Date When Funds Were Received'}
+                    data={grant.dateWhenFundsWereReceived}
+                  />
+                )}
+                {grant.sponsorName && (
+                  <DataBox
+                    title={'Grantor'}
+                    data={grant.sponsorName}
+                    link={grant.sponsorUrl}
+                  />
+                )}
+                <DataBox title={'Status'} data={grant.status} />
+              </section>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
+      )}
+    </>
   );
 };
 
@@ -64,9 +84,9 @@ const DataBox: React.FC<{ title: string; data: string; link?: string }> = ({
       </div>
       <div className="data-box-info">
         {/* {!isNaN(Number(data)) ? <h3>${data}</h3> : <h3>${data}</h3>} */}
-        {!!Date.parse(data) && (
+        {!!Date.parse(data) && isNaN(Number(data)) && (
           <h3>
-            {new Date(data).getUTCMonth()}/{new Date(data).getUTCDate()}/
+            {new Date(data).getUTCMonth() + 1}/{new Date(data).getUTCDate()}/
             {new Date(data).getUTCFullYear()}
           </h3>
         )}
@@ -74,6 +94,8 @@ const DataBox: React.FC<{ title: string; data: string; link?: string }> = ({
         <span className="text-lg antialiased font-bold">
           {!isNaN(Number(data)) && <h3>${data}</h3>}
         </span>
+
+        {title === 'Grantor' && !link && <h3>{data}</h3>}
 
         {title === 'Grantor' && link && (
           <h3>
@@ -83,6 +105,11 @@ const DataBox: React.FC<{ title: string; data: string; link?: string }> = ({
 
         {title === 'Status' && data === 'Approved' && (
           <h3 className="px-2 inline-flex text-md leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+            {data}
+          </h3>
+        )}
+        {title === 'Status' && data === 'Pending' && (
+          <h3 className="px-2 inline-flex text-md leading-5 font-semibold rounded-full bg-gray-300 text-gray-800">
             {data}
           </h3>
         )}

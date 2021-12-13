@@ -1,5 +1,4 @@
-import AppError from '@common/errors/AppError';
-
+import AppError from '../../../common/errors/AppError';
 import FakeUsersRepository from '../infra/db/repositories/fakes/FakeUsersRepository';
 import FakeHashProvider from '../providers/HashProvider/fakes/FakeHashProvider';
 import UpdateProfileService from './UpdateProfileService';
@@ -21,18 +20,20 @@ describe('UpdateProfile', () => {
 
   it('should be able to update profile', async () => {
     const user = await fakeUsersRepository.create({
-      name: 'Barry Allen',
+      firstName: 'John',
+      lastName: 'Doe',
       email: 'ballen@starlabs.com',
       password: '123456',
     });
 
     const updatedUser = await updateProfile.execute({
       userId: user.id,
-      name: 'Wally West',
+      first_name: 'Wally',
+      last_name: 'West',
       email: 'wwest@starlabs.com',
     });
 
-    expect(updatedUser.name).toBe('Wally West');
+    expect(updatedUser.firstName).toBe('Wally');
     expect(updatedUser.email).toBe('wwest@starlabs.com');
   });
 
@@ -40,7 +41,8 @@ describe('UpdateProfile', () => {
     await expect(
       updateProfile.execute({
         userId: 'nonexistent user id',
-        name: 'Test',
+        first_name: 'Test',
+        last_name: 'Test',
         email: 'test@example.com',
       }),
     ).rejects.toBeInstanceOf(AppError);
@@ -48,13 +50,15 @@ describe('UpdateProfile', () => {
 
   it("should not be able to change to another user's email", async () => {
     await fakeUsersRepository.create({
-      name: 'Barry Allen',
+      firstName: 'Barry',
+      lastName: 'Allen',
       email: 'ballen@starlabs.com',
       password: '123456',
     });
 
     const user = await fakeUsersRepository.create({
-      name: 'Oliver Queen',
+      firstName: 'John',
+      lastName: 'Doe',
       email: 'oqueen@queenindustries.com',
       password: '321321',
     });
@@ -62,7 +66,8 @@ describe('UpdateProfile', () => {
     await expect(
       updateProfile.execute({
         userId: user.id,
-        name: 'Barry Allen',
+        first_name: 'Barry',
+        last_name: 'Allen',
         email: 'ballen@starlabs.com',
       }),
     ).rejects.toBeInstanceOf(AppError);
@@ -70,14 +75,16 @@ describe('UpdateProfile', () => {
 
   it('should be able to update password', async () => {
     const user = await fakeUsersRepository.create({
-      name: 'Barry Allen',
+      firstName: 'Barry',
+      lastName: 'Allen',
       email: 'ballen@starlabs.com',
       password: '123456',
     });
 
     const updatedUser = await updateProfile.execute({
       userId: user.id,
-      name: 'Oliver Queen',
+      first_name: 'Oliver',
+      last_name: 'Queen',
       email: 'oqueen@queenindustries.com',
       old_password: '123456',
       password: '321321',
@@ -88,7 +95,8 @@ describe('UpdateProfile', () => {
 
   it('should not be able to update password without the old password', async () => {
     const user = await fakeUsersRepository.create({
-      name: 'Barry Allen',
+      firstName: 'Barry',
+      lastName: 'Allen',
       email: 'ballen@starlabs.com',
       password: '123456',
     });
@@ -96,7 +104,8 @@ describe('UpdateProfile', () => {
     await expect(
       updateProfile.execute({
         userId: user.id,
-        name: 'Oliver Queen',
+        first_name: 'Oliver',
+        last_name: 'Queen',
         email: 'oqueen@queenindustries.com',
         password: '321321',
       }),
@@ -105,7 +114,8 @@ describe('UpdateProfile', () => {
 
   it('should not be able to update password with the incorrect old password', async () => {
     const user = await fakeUsersRepository.create({
-      name: 'Barry Allen',
+      firstName: 'Barry',
+      lastName: 'Allen',
       email: 'ballen@starlabs.com',
       password: '123456',
     });
@@ -113,7 +123,8 @@ describe('UpdateProfile', () => {
     await expect(
       updateProfile.execute({
         userId: user.id,
-        name: 'Oliver Queen',
+        first_name: 'Oliver',
+        last_name: 'Queen',
         email: 'oqueen@queenindustries.com',
         old_password: 'wrong-pw',
         password: '321321',

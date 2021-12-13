@@ -5,7 +5,9 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   BaseEntity,
+  OneToMany,
 } from 'typeorm';
+import Expense from './Expense';
 
 @Entity('grants')
 export default class Grant extends BaseEntity {
@@ -21,13 +23,19 @@ export default class Grant extends BaseEntity {
   @Column({ type: 'timestamp with time zone' })
   closeDate: Date;
 
+  @Column({ type: 'timestamp with time zone', nullable: true })
+  dateWhenFundsWereReceived: Date;
+
+  @Column({ type: 'timestamp with time zone', nullable: true })
+  expirationDate: Date;
+
   @Column()
   status: string;
 
   @Column({ type: 'decimal' })
   amountRequested: number;
 
-  @Column({ type: 'decimal' })
+  @Column({ type: 'decimal', nullable: true })
   amountApproved: number;
 
   @Column({ nullable: true })
@@ -35,6 +43,9 @@ export default class Grant extends BaseEntity {
 
   @Column({ nullable: true })
   sponsorUrl: string;
+
+  @OneToMany(() => Expense, expense => expense.grant)
+  expenses: Expense[];
 
   @CreateDateColumn()
   createdAt: Date;

@@ -1,4 +1,4 @@
-import ICreateGrantDTO from '@modules/grants/dtos/ICreateGrantDTO';
+import ICreateGrantDTO from '../../../../../../modules/grants/dtos/ICreateGrantDTO';
 import { v4 as uuid } from 'uuid';
 import Grant from '../../entities/Grant';
 
@@ -17,12 +17,10 @@ export default class FakeGrantsRepository implements IGrantsRepository {
     return this.grants.filter(g => g.id);
   }
 
-  public async findByGrantName(grantName: string): Promise<Grant[]> {
-    const grants = this.grants.filter(
-      grant => grant.grantName === grantName,
-    );
+  public async findByGrantName(grantName: string): Promise<Grant | undefined> {
+    const grant = this.grants.find(grant => grant.grantName === grantName);
 
-    return grants;
+    return grant;
   }
 
   public async findAllBySponsorName(sponsorName: string): Promise<Grant[]> {

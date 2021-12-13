@@ -14,6 +14,7 @@ import { Container, Content, AnimationContainer, Background } from './styles';
 
 import logoImg from '../../assets/logo-up-md-green.svg';
 import api from '../../services/api';
+import { FaFire } from 'react-icons/fa';
 
 interface ForgotPasswordFormData {
   email: string;
@@ -76,7 +77,9 @@ const ForgotPassword: React.FC = () => {
     <Container>
       <Content>
         <AnimationContainer>
-          <img src={logoImg} alt="Grantify" />
+          <div className="sidebar-icon group bg-white text-secondary">
+            <FaFire size="80" />
+          </div>
 
           <Form ref={formRef} onSubmit={handleSubmit}>
             <h1>Reset password</h1>

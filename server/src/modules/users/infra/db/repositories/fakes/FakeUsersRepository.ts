@@ -1,6 +1,5 @@
 import { v4 as uuid } from 'uuid';
-
-import ICreateUserDTO from '@modules/users/dtos/ICreateUserDTO';
+import ICreateUserDTO from '../../../../dtos/ICreateUserDTO';
 
 import User from '../../entities/User';
 import IUsersRepository from '../interfaces/IUsersRepository';
@@ -20,11 +19,16 @@ class FakeUsersRepository implements IUsersRepository {
     return findUser;
   }
 
+  public async findAll(): Promise<User[]> {
+    return this.users;
+  }
+
   public async create(userData: ICreateUserDTO): Promise<User> {
     const user = new User();
 
     user.id = uuid();
-    user.name = userData.name;
+    user.firstName = userData.firstName;
+    user.lastName = userData.lastName;
     user.email = userData.email;
     user.password = userData.password;
 

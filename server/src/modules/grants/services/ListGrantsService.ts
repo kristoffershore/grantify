@@ -3,9 +3,12 @@ import { inject, injectable } from 'tsyringe';
 import IGrantsRepository from '../infra/db/repositories/interfaces/IGrantsRepository';
 import Grant from '../infra/db/entities/Grant';
 
-interface IRequest {
-  sponsorName: string;
+interface IGrantRequest {
   grantName: string;
+}
+
+interface ISponsorRequest {
+  sponsorName: string;
 }
 
 @injectable()
@@ -20,7 +23,9 @@ export default class ListGrantService {
     return grants;
   }
 
-  public async findBySponsorName({ sponsorName }: IRequest): Promise<Grant[]> {
+  public async findBySponsorName({
+    sponsorName,
+  }: ISponsorRequest): Promise<Grant[]> {
     const grants = await this.grantsRepository.findAllBySponsorName(
       sponsorName,
     );
@@ -28,11 +33,11 @@ export default class ListGrantService {
     return grants;
   }
 
-  public async findByGrantName({ grantName }: IRequest): Promise<Grant[]> {
-    const grants = await this.grantsRepository.findByGrantName(
-      grantName,
-    );
+  public async findByGrantName({
+    grantName,
+  }: IGrantRequest): Promise<Grant | undefined> {
+    const grant = await this.grantsRepository.findByGrantName(grantName);
 
-    return grants;
+    return grant;
   }
 }

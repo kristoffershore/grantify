@@ -1,9 +1,12 @@
 import { Router } from 'express';
 import { celebrate, Joi, Segments } from 'celebrate';
 import GrantsController from '../controllers/GrantsController';
+import ensureAuthenticated from '../../../../../common/infra/http/middlewares/ensureAuthenticated';
 
 const grantsRouter = Router();
 const grantsController = new GrantsController();
+
+// grantsRouter.use(ensureAuthenticated);
 
 grantsRouter.get('/', grantsController.index);
 grantsRouter.get('/:id', grantsController.show);
@@ -16,9 +19,11 @@ grantsRouter.post(
       closeDate: Joi.date().required(),
       status: Joi.string().required(),
       amountRequested: Joi.number().required(),
-      amountApproved: Joi.number().required(),
+      amountApproved: Joi.number(),
       sponsorName: Joi.string(),
       sponsorUrl: Joi.string(),
+      dateWhenFundsWereReceived: Joi.date(),
+      expirationDate: Joi.date(),
     },
   }),
   grantsController.create,
