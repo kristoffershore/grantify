@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
 import { container } from 'tsyringe';
-import { classToClass } from 'class-transformer';
 
 import CreateGrantService from '../../../../../modules/grants/services/CreateGrantService';
 import ListGrantsService from '../../../../../modules/grants/services/ListGrantsService';
@@ -56,7 +55,7 @@ export default class GrantsController {
       expirationDate,
     });
 
-    return response.json(classToClass(grant));
+    return response.json(grant);
   }
 
   public async update(request: Request, response: Response): Promise<Response> {

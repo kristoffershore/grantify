@@ -13,7 +13,7 @@ export default class ProfileController {
 
     const user = await showProfile.execute({ userId: id });
 
-    return response.json(user);
+    return response.json(classToClass(user));
   }
 
   public async update(request: Request, response: Response): Promise<Response> {

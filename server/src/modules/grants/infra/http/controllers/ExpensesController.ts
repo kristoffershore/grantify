@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
 import { container } from 'tsyringe';
-import { classToClass } from 'class-transformer';
 import ListExpensesService from '../../../services/ListExpensesService';
 import ShowExpenseService from '../../../services/ShowExpenseService';
 import CreateExpenseService from '../../../services/CreateExpenseService';
@@ -39,7 +38,7 @@ export default class ExpensesController {
       grantId,
     });
 
-    return response.json(classToClass(expense));
+    return response.json(expense);
   }
 
   public async destroy(

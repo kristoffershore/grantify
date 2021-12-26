@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
 import { container } from 'tsyringe';
 
-import { classToClass } from 'class-transformer';
 import CreateUserPermissionService from '../../../services/CreateUserPermissionService';
 import ListUserPermissionsService from '../../../services/ListUserPermissionsService';
 import DeleteUserPermissionService from '../../../services/DeleteUserPermissionService';
@@ -41,7 +40,7 @@ export default class UserPermissionsController {
       displayName,
     });
 
-    return response.json(classToClass(userPermission));
+    return response.json(userPermission);
   }
 
   public async destroy(

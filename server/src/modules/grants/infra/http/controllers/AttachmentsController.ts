@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
 import { container } from 'tsyringe';
-import { classToClass } from 'class-transformer';
 import ListAttachmentsService from '../../../services/ListAttachmentsService';
 import ShowAttachmentService from '../../../services/ShowAttachmentService';
 import CreateAttachmentService from '../../../services/CreateAttachmentService';
@@ -39,7 +38,7 @@ export default class AttachmentsController {
       grantId,
     });
 
-    return response.json(classToClass(attachment));
+    return response.json(attachment);
   }
 
   public async destroy(
