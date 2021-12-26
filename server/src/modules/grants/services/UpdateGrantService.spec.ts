@@ -44,7 +44,7 @@ describe('UpdateGrant', () => {
     expect(updatedGrant?.status).toBe('Approved');
   });
 
-  it('should throw exception if ID provided does not exist', async () => {
+  it('should throw exception if id provided does not exist', async () => {
     await fakeGrantsRepository.create({
       grantName: 'COVID Grant Fall 2021',
       openDate: new Date('2021-10-18T03:24:00'),

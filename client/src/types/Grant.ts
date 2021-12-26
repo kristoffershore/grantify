@@ -1,5 +1,3 @@
-import { Expense } from './Expense';
-
 export type Grant = {
   id: string;
   grantName: string;
@@ -12,5 +10,4 @@ export type Grant = {
   sponsorUrl?: string;
   dateWhenFundsWereReceived?: string;
   expirationDate?: string;
-  expenses?: Expense[];
 };

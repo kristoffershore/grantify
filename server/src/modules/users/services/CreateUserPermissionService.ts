@@ -40,7 +40,7 @@ class CreateUserPermissionService {
     const checkIfUserExists = await this.usersRepository.findById(userId);
 
     if (!checkIfUserExists) {
-      throw new AppError('User ID provided does not exist.');
+      throw new AppError('User id provided does not exist.');
     }
 
     const allWithUserId = await this.userPermissionsRepository.findAllByUserId(

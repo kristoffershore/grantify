@@ -41,7 +41,7 @@ export default class UpdateGrantService {
     const grant = await this.grantsRepository.findById(id);
 
     if (!grant) {
-      throw new AppError('A grant with the ID provided does not exist.');
+      throw new AppError('A grant with the id provided does not exist.');
     }
 
     grantName && (grant.grantName = grantName);

@@ -9,21 +9,21 @@ import {
 } from 'typeorm';
 import Grant from './Grant';
 
-@Entity('expenses')
-export default class Expense extends BaseEntity {
+@Entity('attachments')
+export default class Attachment extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column()
   name: string;
 
-  @Column({ type: 'decimal' })
-  amount: number;
+  @Column()
+  link: string;
 
   @Column()
   grantId: string;
 
-  @ManyToOne(() => Grant, grant => grant.expenses)
+  @ManyToOne(() => Grant, grant => grant.attachments)
   grant: Grant;
 
   @CreateDateColumn()

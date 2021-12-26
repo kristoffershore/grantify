@@ -13,6 +13,10 @@ import IUsersRepository from '../../modules/users/infra/db/repositories/interfac
 import IUserTokensRepository from '../../modules/users/infra/db/repositories/interfaces/IUserTokensRepository';
 import UsersRepository from '../../modules/users/infra/db/repositories/UsersRepository';
 import UserTokensRepository from '../../modules/users/infra/db/repositories/UserTokensRepository';
+import IExpensesRepository from '../../modules/grants/infra/db/repositories/interfaces/IExpensesRepository';
+import ExpensesRepository from '../../modules/grants/infra/db/repositories/ExpensesRepository';
+import IAttachmentsRepository from '../../modules/grants/infra/db/repositories/interfaces/IAttachmentsRepository';
+import AttachmentsRepository from '../../modules/grants/infra/db/repositories/AttachmentsRepository';
 
 container.registerSingleton<IUsersRepository>(
   'UsersRepository',
@@ -27,6 +31,16 @@ container.registerSingleton<IUserTokensRepository>(
 container.registerSingleton<IGrantsRepository>(
   'GrantsRepository',
   GrantsRepository,
+);
+
+container.registerSingleton<IExpensesRepository>(
+  'ExpensesRepository',
+  ExpensesRepository,
+);
+
+container.registerSingleton<IAttachmentsRepository>(
+  'AttachmentsRepository',
+  AttachmentsRepository,
 );
 
 container.registerSingleton<IPermissionsRepository>(

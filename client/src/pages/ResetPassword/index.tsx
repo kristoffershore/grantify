@@ -12,7 +12,6 @@ import Input from '../../components/Input';
 import Button from '../../components/Button';
 import { Container, Content, AnimationContainer, Background } from './styles';
 
-import logoImg from '../../assets/logo-up-md-green.svg';
 import api from '../../services/api';
 import { FaFire } from 'react-icons/fa';
 

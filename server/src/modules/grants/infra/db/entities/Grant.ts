@@ -7,6 +7,7 @@ import {
   BaseEntity,
   OneToMany,
 } from 'typeorm';
+import Attachment from './Attachment';
 import Expense from './Expense';
 
 @Entity('grants')
@@ -46,6 +47,9 @@ export default class Grant extends BaseEntity {
 
   @OneToMany(() => Expense, expense => expense.grant)
   expenses: Expense[];
+
+  @OneToMany(() => Attachment, attachment => attachment.grant)
+  attachments: Attachment[];
 
   @CreateDateColumn()
   createdAt: Date;

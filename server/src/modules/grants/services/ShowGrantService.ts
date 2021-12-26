@@ -19,7 +19,7 @@ export default class ShowGrantService {
     const grant = await this.grantsRepository.findById(grantId);
 
     if (!grant) {
-      throw new AppError('A grant with the given ID does not exist.');
+      throw new AppError('A grant with the given id does not exist.');
     }
 
     return grant;

@@ -1,4 +1,12 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, {
+  Dispatch,
+  Fragment,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import SideBar from '../../components/SideBar';
 import { Link } from 'react-router-dom';
 import Search from '../../components/Search';
@@ -9,6 +17,15 @@ import { FaSearch } from 'react-icons/fa';
 import api from '../../services/api';
 import { Grant } from '../../types/Grant';
 import { useToast } from '../../hooks/toast';
+import axios from 'axios';
+
+interface ConfirmDeletionProps {
+  id: string;
+  open: boolean;
+  setOpen: Dispatch<SetStateAction<boolean>>;
+  grants: Grant[];
+  setGrants: Dispatch<SetStateAction<Grant[]>>;
+}
 
 const Home: React.FC = () => {
   const { signOut } = useAuth();
@@ -78,25 +95,21 @@ const ContentContainer: React.FC<{ title: string }> = ({ title }) => {
 const GrantTable: React.FC = () => {
   const [grants, setGrants] = useState<Grant[]>([]);
   const [searchKey, setSearchKey] = useState('');
+  const [open, setOpen] = useState(false);
   const { addToast } = useToast();
   const token = localStorage.getItem('@Grantify:token');
 
   const deleteGrant = useCallback(
     (id: string) => {
-      api.get('grants').then(async response => {
-        const findGrant: Grant = response.data.find((g: Grant) => g.id === id);
+      api.get<Grant>(`grants/${id}`).then(async response => {
+        setGrants(grants.filter(grant => grant.id !== response.data.id));
+        await api.delete(`grants/${response.data.id}`);
 
-        if (findGrant) {
-          console.log(findGrant);
-          setGrants(grants.filter(grant => grant.id !== findGrant.id));
-          await api.delete(`grants/${findGrant.id}`);
-
-          addToast({
-            type: 'success',
-            title: 'Grant removed!',
-            description: 'The changes have been saved successfully.',
-          });
-        }
+        addToast({
+          type: 'success',
+          title: 'Grant removed!',
+          description: 'The changes have been saved successfully.',
+        });
       });
     },
     [addToast, grants],
@@ -104,11 +117,7 @@ const GrantTable: React.FC = () => {
 
   useEffect(() => {
     if (token) {
-      api
-        .get('grants', {
-          headers: { Authorization: `Bearer ${token}` },
-        })
-        .then(response => setGrants(response.data));
+      api.get('grants').then(response => setGrants(response.data));
     }
   }, [token]);
 
@@ -177,77 +186,96 @@ const GrantTable: React.FC = () => {
                     }
                   })
                   .map(grant => (
-                    <tr key={grant.id}>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex items-center">
-                          <div>
-                            <div className="text-sm font-medium text-gray-900">
-                              {grant.grantName}
-                            </div>
-                            <div className="text-sm text-gray-500">
-                              {grant.sponsorName}
+                    <Fragment key={grant.id}>
+                      <tr>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="flex items-center">
+                            <div>
+                              <div className="text-sm font-medium text-gray-900">
+                                {grant.grantName}
+                              </div>
+                              <div className="text-sm text-gray-500">
+                                {grant.sponsorName}
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-900">
-                          {new Date(grant.openDate).getUTCMonth() + 1}/
-                          {new Date(grant.openDate).getUTCDate()}/
-                          {new Date(grant.openDate).getUTCFullYear()}
-                        </div>
-                        <div className="text-sm text-gray-500">
-                          {new Date(grant.closeDate).getUTCMonth() + 1}/
-                          {new Date(grant.closeDate).getUTCDate()}/
-                          {new Date(grant.closeDate).getUTCFullYear()}
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        {grant.status === 'Approved' ? (
-                          <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                            {grant.status}
-                          </span>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="text-sm text-gray-900">
+                            {new Date(grant.openDate).getUTCMonth() + 1}/
+                            {new Date(grant.openDate).getUTCDate()}/
+                            {new Date(grant.openDate).getUTCFullYear()}
+                          </div>
+                          <div className="text-sm text-gray-500">
+                            {new Date(grant.closeDate).getUTCMonth() + 1}/
+                            {new Date(grant.closeDate).getUTCDate()}/
+                            {new Date(grant.closeDate).getUTCFullYear()}
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          {grant.status === 'Approved' ? (
+                            <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                              {grant.status}
+                            </span>
+                          ) : (
+                            <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-300 text-gray-800">
+                              {grant.status}
+                            </span>
+                          )}
+                        </td>
+                        {grant.amountApproved ? (
+                          <td className="px-6 py-4 whitespace-nowrap text-sm">
+                            ${grant.amountRequested} / ${grant.amountApproved}
+                          </td>
                         ) : (
-                          <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-300 text-gray-800">
-                            {grant.status}
-                          </span>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm">
+                            ${grant.amountRequested}
+                          </td>
                         )}
-                      </td>
-                      {grant.amountApproved ? (
-                        <td className="px-6 py-4 whitespace-nowrap text-sm">
-                          ${grant.amountRequested} / ${grant.amountApproved}
+                        <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                          <Link
+                            to={`/grants/view/${grant.id}`}
+                            className="text-indigo-600 hover:text-indigo-900"
+                          >
+                            View
+                          </Link>
                         </td>
-                      ) : (
-                        <td className="px-6 py-4 whitespace-nowrap text-sm">
-                          ${grant.amountRequested}
+                        <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                          <Link
+                            to={`/grants/edit/${grant.id}`}
+                            className="text-indigo-600 hover:text-indigo-900"
+                          >
+                            Edit
+                          </Link>
                         </td>
-                      )}
-                      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <Link
-                          to={`/grants/view/${grant.id}`}
-                          className="text-indigo-600 hover:text-indigo-900"
-                        >
-                          View
-                        </Link>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <Link
-                          to={`/grants/edit/${grant.id}`}
-                          className="text-indigo-600 hover:text-indigo-900"
-                        >
-                          Edit
-                        </Link>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <button
-                          type="button"
-                          onClick={() => deleteGrant(grant.id)}
-                          className="text-indigo-600 hover:text-indigo-900"
-                        >
-                          <BsTrash />
-                        </button>
-                      </td>
-                    </tr>
+                        <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                          <div>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                // eslint-disable-next-line no-restricted-globals
+                                const option = confirm(
+                                  `Are you sure you want to delete the grant ${grant.grantName}? This action cannot be reversed`,
+                                );
+                                option && deleteGrant(grant.id);
+                              }}
+                              className="text-indigo-600 hover:text-indigo-900"
+                            >
+                              <BsTrash />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                      {/* {open && (
+                        <ConfirmDeletionPopup
+                          id={grant.id}
+                          open={open}
+                          setOpen={setOpen}
+                          grants={grants}
+                          setGrants={setGrants}
+                        />
+                      )} */}
+                    </Fragment>
                   ))}
               </tbody>
             </table>
@@ -257,5 +285,41 @@ const GrantTable: React.FC = () => {
     </div>
   );
 };
+
+// const ConfirmDeletionPopup: React.FC<ConfirmDeletionProps> = ({
+//   id,
+//   open,
+//   setOpen,
+//   grants,
+//   setGrants,
+// }) => {
+//   const cancelButtonRef = useRef(null);
+//   const { addToast } = useToast();
+
+//   const deleteGrant = useCallback(
+//     (id: string) => {
+//       api.get('grants').then(async response => {
+//         const findGrant: Grant = response.data.find((g: Grant) => g.id === id);
+
+//         if (findGrant) {
+//           console.log(findGrant);
+//           setGrants(grants.filter(grant => grant.id !== findGrant.id));
+//           await api.delete(`grants/${findGrant.id}`);
+
+//           addToast({
+//             type: 'success',
+//             title: 'Grant removed!',
+//             description: 'The changes have been saved successfully.',
+//           });
+//         }
+//       });
+//     },
+//     [addToast, grants, setGrants],
+//   );
+
+//   return (
+
+//   );
+// };
 
 export default Home;

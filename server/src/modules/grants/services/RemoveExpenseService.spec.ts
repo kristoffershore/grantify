@@ -1,39 +1,32 @@
 import AppError from '../../../common/errors/AppError';
+import FakeExpensesRepository from '../infra/db/repositories/fakes/FakeExpensesRepository';
 import FakeGrantsRepository from '../infra/db/repositories/fakes/FakeGrantsRepository';
-import RemoveGrantService from './RemoveGrantService';
+import RemoveExpenseService from './RemoveExpenseService';
 
 let fakeGrantsRepository: FakeGrantsRepository;
-let removeGrant: RemoveGrantService;
+let fakeExpensesRepository: FakeExpensesRepository;
+let removeExpense: RemoveExpenseService;
 
 describe('RemoveGrant', () => {
   beforeEach(() => {
     fakeGrantsRepository = new FakeGrantsRepository();
+    fakeExpensesRepository = new FakeExpensesRepository();
 
-    removeGrant = new RemoveGrantService(fakeGrantsRepository);
+    removeExpense = new RemoveExpenseService(
+      fakeGrantsRepository,
+      fakeExpensesRepository,
+    );
   });
 
   it('should throw exception if id provided does not exist', async () => {
-    await fakeGrantsRepository.create({
-      grantName: 'COVID Grant Fall 2021',
-      openDate: new Date('2021-10-18T03:24:00'),
-      closeDate: new Date('2021-10-25T03:24:00'),
-      status: 'Pending',
-      amountRequested: 2000.0,
-      amountApproved: 1000.0,
-      sponsorName: 'UNF',
-      sponsorUrl: 'www.unf.edu',
-      dateWhenFundsWereReceived: new Date('2021-10-21T03:24:00'),
-      expirationDate: new Date('2021-12-30T03:24:00'),
-    });
-
     await expect(
-      removeGrant.execute({
+      removeExpense.execute({
         id: '123456789',
       }),
     ).rejects.toBeInstanceOf(AppError);
   });
 
-  it('should remove a grant whose id is valid', async () => {
+  it('should remove an expense whose id is valid', async () => {
     const grant = await fakeGrantsRepository.create({
       grantName: 'COVID Grant Fall 2021',
       openDate: new Date('2021-10-18T03:24:00'),
@@ -47,8 +40,14 @@ describe('RemoveGrant', () => {
       expirationDate: new Date('2021-12-30T03:24:00'),
     });
 
-    await removeGrant.execute({ id: grant.id });
+    const e = await fakeExpensesRepository.create({
+      name: 'Salaries',
+      amount: 400.59,
+      grantId: grant.id,
+    });
 
-    expect(fakeGrantsRepository.findById(grant.id)).toMatchObject({});
+    await removeExpense.execute({ id: e.id });
+
+    expect(fakeExpensesRepository.findById(e.id)).toMatchObject({});
   });
 });

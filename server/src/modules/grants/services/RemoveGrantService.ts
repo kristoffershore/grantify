@@ -19,7 +19,7 @@ export default class RemoveGrantService {
     const grant = await this.grantsRepository.findById(id);
 
     if (!grant) {
-      throw new AppError('A grant with the ID provided does not exist.');
+      throw new AppError('A grant with the id provided does not exist.');
     }
 
     await this.grantsRepository.delete(grant);

@@ -1,6 +1,6 @@
-export type Expense = {
+export type Attachment = {
   id: string;
   name: string;
-  amount: number;
+  link: string;
   grantId: string;
 };
