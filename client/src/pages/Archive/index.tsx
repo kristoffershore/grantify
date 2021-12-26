@@ -160,11 +160,13 @@ const ContentContainer: React.FC<{
         {grant && (
           <>
             <p className="my-4 text-gray-500">{grant.grantName}</p>
+            {/* <div className="grid grid-cols-1 p-6"> */}
             <ArchiveList
               setOpen={setOpen}
               attachments={attachments}
               deleteAttachment={deleteAttachment}
             />
+            {/* </div> */}
           </>
         )}
         {open && <AddFileForm setOpen={setOpen} onSubmit={onSubmit} />}
@@ -192,8 +194,8 @@ const ArchiveList: React.FC<{
           +
         </button>
       </div>
-      <div className="border-t border-gray-200">
-        <dl>
+      <div className=" border-t border-gray-200">
+        <dl className="">
           <div className="bg-white">
             <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
               {attachments.length !== 0 && (
@@ -201,9 +203,9 @@ const ArchiveList: React.FC<{
                   {attachments.map(attachment => (
                     <li
                       key={attachment.id}
-                      className="w-screen pl-3 pr-4 py-3 flex items-center justify-between text-sm"
+                      className="pl-3 pr-4 py-3 flex items-center justify-between text-sm"
                     >
-                      <div className="pb-6 flex-1 flex items-center">
+                      <div className="flex-1 flex items-center">
                         <BsPaperclip
                           className="flex-shrink-0 h-5 w-5 text-gray-500"
                           aria-hidden="true"
