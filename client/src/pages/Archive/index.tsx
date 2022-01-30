@@ -10,7 +10,6 @@ import {
 } from 'react';
 import { BsPaperclip } from 'react-icons/bs';
 import { useParams } from 'react-router';
-import { Link } from 'react-router-dom';
 import Button from '../../components/Button';
 import Divider from '../../components/Divider';
 import Input from '../../components/Input';

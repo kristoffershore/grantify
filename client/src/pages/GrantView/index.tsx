@@ -110,7 +110,7 @@ const GrantView: React.FC = () => {
         });
       }
     },
-    [id, expenses, history, addToast],
+    [id, expenses, addToast],
   );
 
   useEffect(() => {
@@ -274,8 +274,8 @@ const ExpensesBreakdown: React.FC<{
   return (
     <>
       <h1 className="content-title">Expenses</h1>
-      <section className="grid grid-cols-1">
-        <div className="bg-white my-4 p-6 rounded-xl mx-2 shadow-lg w-full">
+      <section className="grid grid-cols-1 w-7/10">
+        <div className="bg-white my-4 p-6 rounded-xl mx-2 shadow-lg">
           <div className="">
             <div className="flex justify-start mb-3">
               <h3 className="text-gray-700">Breakdown</h3>

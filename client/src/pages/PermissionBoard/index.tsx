@@ -47,56 +47,79 @@ const PermissionsTable: React.FC = () => {
   const { addToast } = useToast();
 
   const handleToggle = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      //COMECAR AQUI
-      const switchClicked = permissions.find(
+    async (e: React.ChangeEvent<HTMLInputElement>) => {
+      const permissionSwitchClicked = permissions.find(
         p => p.displayName === e.currentTarget.name,
       );
 
-      if (switchClicked) {
-        const permissionToAlter = currentPermissions.find(
-          cp => switchClicked.id === cp.permissionTypeId,
-        );
-
-        if (permissionToAlter) {
-          setCurrentPermissions(
-            currentPermissions.filter(cp => cp.id !== permissionToAlter.id),
-          );
-          console.log(currentPermissions);
-        } else {
-          const association: UserPermissionAssn = {
+      if (permissionSwitchClicked) {
+        if (e.currentTarget.checked) {
+          const permToAdd: UserPermissionAssn = {
             id: v4(),
+            permissionTypeId: permissionSwitchClicked.id,
             userId: id,
-            permissionTypeId: switchClicked.id,
           };
 
-          setCurrentPermissions([...currentPermissions, association]);
-          console.log(currentPermissions);
+          setCurrentPermissions([...currentPermissions, permToAdd]);
+        } else {
+          const permToRemove = currentPermissions.find(
+            cp => cp.permissionTypeId === permissionSwitchClicked.id,
+          );
+
+          if (permToRemove) {
+            setCurrentPermissions(
+              currentPermissions.filter(cp => cp.id !== permToRemove.id),
+            );
+          }
         }
       }
     },
-    [permissions, currentPermissions, id],
+    [permissions, id, currentPermissions],
   );
 
   const handleSubmit = useCallback(async () => {
     try {
-      //se tiver alguma association no db, deletar
+      const { data: currentAssociationsInDb } = await api.get<
+        UserPermissionAssn[]
+      >(`users/${id}/user-permissions`);
 
-      // currentPermissions.forEach(cp => {
-      //   console.log(cp.id);
-      //   api.delete(`users/${id}/user-permissions/${cp.id}`);
-      // });
+      // if permissions are active on interface but not in db, save new additions
+      if (currentPermissions) {
+        const associationsInStateButNotInDb = currentPermissions.filter(
+          cp =>
+            !currentAssociationsInDb.find(
+              p => p.permissionTypeId === cp.permissionTypeId,
+            ),
+        );
 
-      // currentPermissions.forEach(cp => {
-      //   permissions.forEach(p => {
-      //     if (p.id === cp.permissionTypeId) {
-      //       api.post(`users/${id}/user-permissions`, {
-      //         displayName: p.displayName,
-      //       });
-      //     }
-      //   });
-      // });
-      //postar associations novas
+        const permsInStateButNotInDb = permissions.filter(p =>
+          associationsInStateButNotInDb.find(
+            assn => p.id === assn.permissionTypeId,
+          ),
+        );
+
+        if (associationsInStateButNotInDb) {
+          permsInStateButNotInDb.forEach(async perm => {
+            await api.post<UserPermissionAssn>(`users/${id}/user-permissions`, {
+              displayName: perm.displayName,
+            });
+          });
+        }
+      }
+
+      // if permissions are active in db but not on interface, remove from db
+      if (currentAssociationsInDb) {
+        const associationsInDbButNotInState = currentAssociationsInDb.filter(
+          ca => !currentPermissions.find(cp => ca.id === cp.id),
+        );
+
+        if (associationsInDbButNotInState) {
+          associationsInDbButNotInState.forEach(async assn => {
+            await api.delete(`users/${id}/user-permissions/${assn.id}`);
+          });
+        }
+      }
+
       addToast({
         type: 'success',
         title: 'Changes saved successfully!',
@@ -109,7 +132,7 @@ const PermissionsTable: React.FC = () => {
         description: err,
       });
     }
-  }, [addToast]);
+  }, [addToast, currentPermissions, id, permissions]);
 
   useEffect(() => {
     api.get('permissions').then(response => setPermissions(response.data));
@@ -123,55 +146,46 @@ const PermissionsTable: React.FC = () => {
 
   return (
     <div className="flex flex-col">
-      <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-        <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
-          <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg ">
-            <div className="min-w-full divide-y divide-gray-200">
-              <div className="bg-gray-50">
-                <div>
-                  <div className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Name / Id
-                  </div>
-                </div>
+      <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+        <div className="min-w-full divide-y divide-gray-200">
+          <div className="bg-gray-50">
+            <div className="flex flex-row justify-between">
+              <div className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Name
               </div>
-              <div className="bg-white divide-y divide-gray-200">
-                <Form ref={formRef} onSubmit={handleSubmit}>
-                  {permissions.map(permission => (
-                    <div
-                      key={permission.id}
-                      className="flex flex-row items-center"
-                    >
-                      <div className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex items-center">
-                          <div>
-                            <div className="text-sm font-medium text-gray-900">
-                              {permission.displayName
-                                .replace(/([A-Z])/g, match => ` ${match}`)
-                                .replace(/^./, match => match.toUpperCase())
-                                .trim()}
-                            </div>
-                            <div className="text-sm text-gray-500">
-                              {permission.id}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="px-6 py-4 whitespace-nowrap">
-                        <ToggleSwitch
-                          name={permission.displayName}
-                          permissionId={permission.id}
-                          currentPermissions={currentPermissions}
-                          onChange={e => handleToggle(e)}
-                        />
-                      </div>
-                    </div>
-                  ))}
-                  <div className="px-6 py-4 mb-2">
-                    <Button type="submit">Save changes</Button>
-                  </div>
-                </Form>
+              <div className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Status
               </div>
             </div>
+          </div>
+          <div className="bg-white divide-y divide-gray-200">
+            <Form ref={formRef} onSubmit={handleSubmit}>
+              {permissions.map(permission => (
+                <React.Fragment key={permission.id}>
+                  <div className="flex flex-row items- justify-between">
+                    <div className="px-6 py-4 whitespace-nowrap">
+                      <div className="text-sm font-medium text-gray-900">
+                        {permission.displayName
+                          .replace(/([A-Z])/g, match => ` ${match}`)
+                          .replace(/^./, match => match.toUpperCase())
+                          .trim()}
+                      </div>
+                    </div>
+                    <div className="px-6 py-4 whitespace-nowrap">
+                      <ToggleSwitch
+                        name={permission.displayName}
+                        permissionId={permission.id}
+                        currentPermissions={currentPermissions}
+                        onChange={e => handleToggle(e)}
+                      />
+                    </div>
+                  </div>
+                </React.Fragment>
+              ))}
+              <div className="px-6 py-4 mb-2">
+                <Button type="submit">Save changes</Button>
+              </div>
+            </Form>
           </div>
         </div>
       </div>
