@@ -1,6 +1,7 @@
 import React, {
   Dispatch,
   Fragment,
+  MouseEventHandler,
   SetStateAction,
   useCallback,
   useEffect,
@@ -49,55 +50,218 @@ const ContentContainer: React.FC<{ title: string }> = ({ title }) => {
   );
 };
 
-// export const grants = [
-//   {
-//     id: 1,
-//     grantName: 'COVID Grant Fall 2021',
-//     openDate: '2021-10-19T00:00:00.000Z',
-//     closeDate: '2021-12-25T00:00:00.000Z',
-//     dateWhenMoneyWasReceived: '2021-12-01T00:00:00.000Z',
-//     status: 'Pending',
-//     amountRequested: 2000.0,
-//     amountApproved: 1000.0,
-//     sponsorName: 'UNF',
-//     sponsorUrl: 'www.unf.edu',
-//     expenses: [
-//       {
-//         fiscoCode: 1,
-//         expenseName: 'Salaries',
-//         totalBudget: 500.0,
-//         balanceRemaining: 115.0,
-//       },
-//     ],
-//   },
-//   {
-//     id: 2,
-//     grantName: 'Performance Grant',
-//     openDate: '2021-11-01T00:00:00.000Z',
-//     closeDate: '2021-12-31T00:00:00.000Z',
-//     dateWhenMoneyWasReceived: '2021-12-01T00:00:00.000Z',
-//     status: 'Approved',
-//     amountRequested: 5000.0,
-//     amountApproved: 2500.0,
-//     sponsorName: 'Pacesetter',
-//     sponsorUrl: 'www.pacesetter.com',
-//     expenses: [
-//       {
-//         fiscoCode: 1,
-//         expenseName: 'Salaries',
-//         totalBudget: 500.0,
-//         balanceRemaining: 115.0,
-//       },
-//     ],
-//   },
-// ];
+export let grants = [
+  {
+    id: 1,
+    grantName: 'COVID Grant Fall 2021',
+    openDate: '2020-11-19T00:00:00.000Z',
+    closeDate: '2021-12-25T00:00:00.000Z',
+    dateWhenMoneyWasReceived: '2021-12-01T00:00:00.000Z',
+    status: 'Pending',
+    amountRequested: 2000.0,
+    amountApproved: 1000.0,
+    sponsorName: 'UNF',
+    sponsorUrl: 'www.unf.edu',
+    expenses: [
+      {
+        fiscoCode: 1,
+        expenseName: 'Salaries',
+        totalBudget: 500.0,
+        balanceRemaining: 115.0,
+        yearExpenses: [
+          {
+            yearNumber: 1,
+            totalExpenses: 300.0,
+          },
+          {
+            yearNumber: 2,
+            totalExpenses: 85.0,
+          },
+        ],
+      },
+    ],
+  },
+  {
+    id: 6,
+    grantName: 'COVID Grant 2',
+    openDate: '2020-11-19T00:00:00.000Z',
+    closeDate: '2026-08-28T00:00:00.000Z',
+    dateWhenMoneyWasReceived: '2021-12-01T00:00:00.000Z',
+    status: 'Pending',
+    amountRequested: 5000.0,
+    amountApproved: 2500.0,
+    sponsorName: 'UNF',
+    sponsorUrl: 'www.pacesetter.com',
+    expenses: [
+      {
+        fiscoCode: 1,
+        expenseName: 'Salaries',
+        totalBudget: 500.0,
+        balanceRemaining: 115.0,
+        yearExpenses: [
+          {
+            yearNumber: 1,
+            totalExpenses: 300.0,
+          },
+          {
+            yearNumber: 2,
+            totalExpenses: 85.0,
+          },
+        ],
+      },
+    ],
+  },
+  {
+    id: 2,
+    grantName: 'Performance Grant',
+    openDate: '2020-11-19T00:00:00.000Z',
+    closeDate: '2022-12-31T00:00:00.000Z',
+    dateWhenMoneyWasReceived: '2021-12-01T00:00:00.000Z',
+    status: 'Approved',
+    amountRequested: 5000.0,
+    amountApproved: 2500.0,
+    sponsorName: 'Pacesetter',
+    sponsorUrl: 'www.pacesetter.com',
+    expenses: [
+      {
+        fiscoCode: 1,
+        expenseName: 'Salaries',
+        totalBudget: 500.0,
+        balanceRemaining: 115.0,
+        yearExpenses: [
+          {
+            yearNumber: 1,
+            totalExpenses: 300.0,
+          },
+          {
+            yearNumber: 2,
+            totalExpenses: 85.0,
+          },
+        ],
+      },
+    ],
+  },
+  {
+    id: 3,
+    grantName: 'Gooby Grant',
+    openDate: '2020-11-19T00:00:00.000Z',
+    closeDate: '2020-12-31T00:00:00.000Z',
+    dateWhenMoneyWasReceived: '2021-12-01T00:00:00.000Z',
+    status: 'Approved',
+    amountRequested: 1000.0,
+    amountApproved: 16000.0,
+    sponsorName: 'Pacesetter',
+    sponsorUrl: 'www.pacesetter.com',
+    expenses: [
+      {
+        fiscoCode: 1,
+        expenseName: 'Salaries',
+        totalBudget: 500.0,
+        balanceRemaining: 115.0,
+        yearExpenses: [
+          {
+            yearNumber: 1,
+            totalExpenses: 300.0,
+          },
+          {
+            yearNumber: 2,
+            totalExpenses: 85.0,
+          },
+        ],
+      },
+    ],
+  },
+  {
+    id: 4,
+    grantName: 'Grant Grant',
+    openDate: '2020-11-19T00:00:00.000Z',
+    closeDate: '2021-08-31T00:00:00.000Z',
+    dateWhenMoneyWasReceived: '2021-12-01T00:00:00.000Z',
+    status: 'Pending',
+    amountRequested: 5000.0,
+    amountApproved: 2500.0,
+    sponsorName: 'UNF',
+    sponsorUrl: 'www.pacesetter.com',
+    expenses: [
+      {
+        fiscoCode: 1,
+        expenseName: 'Salaries',
+        totalBudget: 500.0,
+        balanceRemaining: 115.0,
+        yearExpenses: [
+          {
+            yearNumber: 1,
+            totalExpenses: 300.0,
+          },
+          {
+            yearNumber: 2,
+            totalExpenses: 85.0,
+          },
+        ],
+      },
+    ],
+  },
+  {
+    id: 5,
+    grantName: 'Bones Grant',
+    openDate: '2020-11-19T00:00:00.000Z',
+    closeDate: '2021-08-28T00:00:00.000Z',
+    dateWhenMoneyWasReceived: '2021-12-01T00:00:00.000Z',
+    status: 'Approved',
+    amountRequested: 5000.0,
+    amountApproved: 2500.0,
+    sponsorName: 'UNF',
+    sponsorUrl: 'www.pacesetter.com',
+    expenses: [
+      {
+        fiscoCode: 1,
+        expenseName: 'Salaries',
+        totalBudget: 500.0,
+        balanceRemaining: 115.0,
+        yearExpenses: [
+          {
+            yearNumber: 1,
+            totalExpenses: 300.0,
+          },
+          {
+            yearNumber: 2,
+            totalExpenses: 85.0,
+          },
+        ],
+      },
+    ],
+  },
+];
+
+function SortButton({
+  onClick,
+}: {
+  sortKey: any;
+  onClick: MouseEventHandler<HTMLButtonElement>;
+}) {
+  return <button onClick={onClick}>▼</button>;
+}
 
 const GrantTable: React.FC = () => {
   const [grants, setGrants] = useState<Grant[]>([]);
   const [searchKey, setSearchKey] = useState('');
+  const [sortKey, setSortKey] = useState('');
   const [open, setOpen] = useState(false);
   const { addToast } = useToast();
   const token = localStorage.getItem('@Grantify:token');
+
+  function dateSort() {
+    /*grants =*/ grants
+      // .filter(obj => {
+      //   const currentDate = new Date();
+      //   const objDate = new Date(obj.closeDate);
+      //   if (objDate > currentDate) {
+      //     return obj;
+      //   }
+      // })
+      .sort((a, b) => (a.closeDate > b.closeDate ? 1 : -1));
+    setSortKey('sorted');
+  }
 
   const deleteGrant = useCallback(
     (id: string) => {
@@ -147,6 +311,12 @@ const GrantTable: React.FC = () => {
                     className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                   >
                     Open Date / Close Date
+                    <SortButton
+                      onClick={() => dateSort()}
+                      {...{
+                        sortKey,
+                      }}
+                    />
                   </th>
                   <th
                     scope="col"
