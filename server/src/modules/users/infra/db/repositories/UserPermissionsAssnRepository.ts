@@ -17,6 +17,20 @@ class UserPermissionsAssnRepository implements IUserPermissionsAssnRepository {
     return this.ormRepository.findOne(id);
   }
 
+  public async findByUserIdAndPermissionId(
+    userId: string,
+    permissionTypeId: number,
+  ): Promise<UserPermissionAssociation | undefined> {
+    const userPermissionAssociation = this.ormRepository.findOne({
+      where: {
+        userId,
+        permissionTypeId,
+      },
+    });
+
+    return userPermissionAssociation;
+  }
+
   public async findAllByPermissionTypeId(
     id: number,
   ): Promise<UserPermissionAssociation[]> {

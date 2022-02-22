@@ -3,6 +3,7 @@ import { celebrate, Joi, Segments } from 'celebrate';
 import GrantsController from '../controllers/GrantsController';
 import ensureAuthenticated from '../../../../../common/infra/http/middlewares/ensureAuthenticated';
 import ExpensesController from '../controllers/ExpensesController';
+import { can } from '../../../../../common/infra/http/middlewares/ensureAuthorized';
 
 const grantsRouter = Router();
 const grantsController = new GrantsController();
@@ -11,9 +12,10 @@ const expensesController = new ExpensesController();
 grantsRouter.use(ensureAuthenticated);
 
 grantsRouter.get('/', grantsController.index);
-grantsRouter.get('/:id', grantsController.show);
+grantsRouter.get('/:id', can('viewGrant'), grantsController.show);
 grantsRouter.post(
   '/',
+  can('addGrant'),
   celebrate({
     [Segments.BODY]: {
       grantName: Joi.string().required(),
@@ -32,8 +34,8 @@ grantsRouter.post(
   grantsController.create,
 );
 
-grantsRouter.put('/:id', grantsController.update);
-grantsRouter.delete('/:id', grantsController.destroy);
+grantsRouter.put('/:id', can('editGrant'), grantsController.update);
+grantsRouter.delete('/:id', can('deleteGrant'), grantsController.destroy);
 
 // expense routes
 grantsRouter.get('/view/:grantId', expensesController.index);

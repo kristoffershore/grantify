@@ -9,7 +9,7 @@ import React, {
 
 import { useAuth } from '../../hooks/auth';
 import SideBar from '../../components/SideBar';
-import { useHistory, useParams } from 'react-router';
+import { useParams } from 'react-router';
 import api from '../../services/api';
 import { Grant } from '../../types/Grant';
 import { BsFillArchiveFill } from 'react-icons/bs';
@@ -38,7 +38,6 @@ const GrantView: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const { signOut } = useAuth();
   const { addToast } = useToast();
-  const history = useHistory();
   const formRef = useRef<FormHandles>(null);
 
   const deleteExpense = useCallback(

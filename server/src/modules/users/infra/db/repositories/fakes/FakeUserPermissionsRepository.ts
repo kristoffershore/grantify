@@ -12,6 +12,17 @@ class FakeUserPermissionsRepository implements IUserPermissionsAssnRepository {
     return this.usersPermissions.find(up => up.id === id);
   }
 
+  public async findByUserIdAndPermissionId(
+    userId: string,
+    permissionTypeId: number,
+  ): Promise<UserPermissionAssociation | undefined> {
+    const userPermissionAssociation = this.usersPermissions.find(
+      up => up.permissionTypeId === permissionTypeId && up.userId === userId,
+    );
+
+    return userPermissionAssociation;
+  }
+
   public async findAllByPermissionTypeId(
     id: number,
   ): Promise<UserPermissionAssociation[]> {

@@ -1,8 +1,6 @@
 import React, {
-  Dispatch,
   Fragment,
   MouseEventHandler,
-  SetStateAction,
   useCallback,
   useEffect,
   useState,
@@ -17,14 +15,16 @@ import { FaSearch } from 'react-icons/fa';
 import api from '../../services/api';
 import { Grant } from '../../types/Grant';
 import { useToast } from '../../hooks/toast';
+import UserPermissionAssociation from '../../types/UserPermissionAssociation';
+import Permission from '../../types/Permission';
 
-interface ConfirmDeletionProps {
-  id: string;
-  open: boolean;
-  setOpen: Dispatch<SetStateAction<boolean>>;
-  grants: Grant[];
-  setGrants: Dispatch<SetStateAction<Grant[]>>;
-}
+// interface ConfirmDeletionProps {
+//   id: string;
+//   open: boolean;
+//   setOpen: Dispatch<SetStateAction<boolean>>;
+//   grants: Grant[];
+//   setGrants: Dispatch<SetStateAction<Grant[]>>;
+// }
 
 const Home: React.FC = () => {
   const { signOut } = useAuth();
@@ -63,16 +63,36 @@ function SortButton({
 
 const GrantTable: React.FC = () => {
   const [grants, setGrants] = useState<Grant[]>([]);
+  const [userPermissionAssociations, setUserPermissionAssociations] = useState<
+    UserPermissionAssociation[]
+  >([]);
+  const [permissions, setPermissions] = useState<Permission[]>([]);
   const [searchKey, setSearchKey] = useState('');
   const [sortKey, setSortKey] = useState('');
-  const [open, setOpen] = useState(false);
   const { addToast } = useToast();
-  const { user, signOut } = useAuth();
+  const { user } = useAuth();
 
   function dateSort() {
     grants.sort((a, b) => (a.closeDate > b.closeDate ? 1 : -1));
     setSortKey('sorted');
   }
+
+  const canAccess = useCallback(
+    (permissionDisplayName: string): boolean => {
+      const permissionMatches = permissions.filter(p =>
+        userPermissionAssociations
+          .map(upa => upa.permissionTypeId)
+          .includes(p.id),
+      );
+
+      const displayNamePermissionMatches = permissionMatches.map(
+        pm => pm.displayName,
+      );
+
+      return displayNamePermissionMatches.includes(permissionDisplayName);
+    },
+    [permissions, userPermissionAssociations],
+  );
 
   const deleteGrant = useCallback(
     (id: string) => {
@@ -92,13 +112,19 @@ const GrantTable: React.FC = () => {
 
   useEffect(() => {
     api.get<Grant[]>('grants').then(response => setGrants(response.data));
-  }, [addToast, signOut]);
+    api
+      .get<UserPermissionAssociation[]>(`users/${user.id}/user-permissions`)
+      .then(response => setUserPermissionAssociations(response.data));
+    api
+      .get<Permission[]>('permissions')
+      .then(response => setPermissions(response.data));
+  }, [user.id]);
 
   return (
     <div className="flex flex-col">
       <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
         <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
-          <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+          <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg bg-white">
             <Search
               icon={FaSearch}
               placeholder="Search for a grant by name..."
@@ -210,39 +236,45 @@ const GrantTable: React.FC = () => {
                             ${grant.amountRequested}
                           </td>
                         )}
-                        <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                          <Link
-                            to={`/grants/view/${grant.id}`}
-                            className="text-indigo-600 hover:text-indigo-900"
-                          >
-                            View
-                          </Link>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                          <Link
-                            to={`/grants/edit/${grant.id}`}
-                            className="text-indigo-600 hover:text-indigo-900"
-                          >
-                            Edit
-                          </Link>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                          <div>
-                            <button
-                              type="button"
-                              onClick={() => {
-                                // eslint-disable-next-line no-restricted-globals
-                                const option = confirm(
-                                  `Are you sure you want to delete the grant ${grant.grantName}? This action cannot be reversed`,
-                                );
-                                option && deleteGrant(grant.id);
-                              }}
+                        {canAccess('viewGrant') && (
+                          <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                            <Link
+                              to={`/grants/view/${grant.id}`}
                               className="text-indigo-600 hover:text-indigo-900"
                             >
-                              <BsTrash />
-                            </button>
-                          </div>
-                        </td>
+                              View
+                            </Link>
+                          </td>
+                        )}
+                        {canAccess('editGrant') && (
+                          <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                            <Link
+                              to={`/grants/edit/${grant.id}`}
+                              className="text-indigo-600 hover:text-indigo-900"
+                            >
+                              Edit
+                            </Link>
+                          </td>
+                        )}
+                        {canAccess('deleteGrant') && (
+                          <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                            <div>
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  // eslint-disable-next-line no-restricted-globals
+                                  const option = confirm(
+                                    `Are you sure you want to delete the grant ${grant.grantName}? This action cannot be reversed`,
+                                  );
+                                  option && deleteGrant(grant.id);
+                                }}
+                                className="text-indigo-600 hover:text-indigo-900"
+                              >
+                                <BsTrash />
+                              </button>
+                            </div>
+                          </td>
+                        )}
                       </tr>
                       {/* {open && (
                         <ConfirmDeletionPopup

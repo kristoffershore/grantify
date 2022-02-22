@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import SideBar from '../../components/SideBar';
 import { useAuth } from '../../hooks/auth';
 import api from '../../services/api';
+import Permission from '../../types/Permission';
+import UserPermissionAssociation from '../../types/UserPermissionAssociation';
 import { Container } from './styles';
 
 type User = {
@@ -32,6 +34,28 @@ const UserBoard: React.FC = () => {
 
 const UsersTable: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
+  const [userPermissionAssociations, setUserPermissionAssociations] = useState<
+    UserPermissionAssociation[]
+  >([]);
+  const [permissions, setPermissions] = useState<Permission[]>([]);
+  const { user } = useAuth();
+
+  const canAccess = useCallback(
+    (permissionDisplayName: string): boolean => {
+      const permissionMatches = permissions.filter(p =>
+        userPermissionAssociations
+          .map(upa => upa.permissionTypeId)
+          .includes(p.id),
+      );
+
+      const displayNamePermissionMatches = permissionMatches.map(
+        pm => pm.displayName,
+      );
+
+      return displayNamePermissionMatches.includes(permissionDisplayName);
+    },
+    [permissions, userPermissionAssociations],
+  );
 
   useEffect(() => {
     api.get('users').then(response => {
@@ -39,7 +63,13 @@ const UsersTable: React.FC = () => {
         response.data.filter((user: User) => user.email !== 'seed@dev.com'),
       );
     });
-  }, []);
+    api
+      .get<UserPermissionAssociation[]>(`users/${user.id}/user-permissions`)
+      .then(response => setUserPermissionAssociations(response.data));
+    api
+      .get<Permission[]>('permissions')
+      .then(response => setPermissions(response.data));
+  }, [user.id]);
 
   return (
     <Container>
@@ -62,7 +92,7 @@ const UsersTable: React.FC = () => {
                     Account creation date
                   </th>
                   <th scope="col" className="relative px-12 py-3">
-                    <span className="sr-only">Edit permissions</span>
+                    <span className="sr-only">Access control</span>
                   </th>
                 </tr>
               </thead>
@@ -89,13 +119,15 @@ const UsersTable: React.FC = () => {
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                      <Link
-                        href="#"
-                        className="text-indigo-600 hover:text-indigo-900"
-                        to={`/users/${user.id}`}
-                      >
-                        Edit permissions
-                      </Link>
+                      {canAccess('editPermissions') && (
+                        <Link
+                          href="#"
+                          className="text-indigo-600 hover:text-indigo-900"
+                          to={`/users/${user.id}`}
+                        >
+                          View permissions
+                        </Link>
+                      )}
                     </td>
                   </tr>
                 ))}

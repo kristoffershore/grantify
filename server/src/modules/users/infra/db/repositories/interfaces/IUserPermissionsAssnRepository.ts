@@ -3,6 +3,10 @@ import UserPermissionAssociation from '../../entities/UserPermissionAssociation'
 
 export default interface IUserPermissionsAssnRepository {
   findById(id: string): Promise<UserPermissionAssociation | undefined>;
+  findByUserIdAndPermissionId(
+    userId: string,
+    permissionTypeId: number,
+  ): Promise<UserPermissionAssociation | undefined>;
   findAllByPermissionTypeId(id: number): Promise<UserPermissionAssociation[]>;
   findAllByUserId(id: string): Promise<UserPermissionAssociation[]>;
   create(data: ICreateUserPermissionsDTO): Promise<UserPermissionAssociation>;
