@@ -5,7 +5,6 @@ import React, {
   SetStateAction,
   useCallback,
   useEffect,
-  useRef,
   useState,
 } from 'react';
 import SideBar from '../../components/SideBar';
@@ -18,7 +17,6 @@ import { FaSearch } from 'react-icons/fa';
 import api from '../../services/api';
 import { Grant } from '../../types/Grant';
 import { useToast } from '../../hooks/toast';
-import axios from 'axios';
 
 interface ConfirmDeletionProps {
   id: string;
@@ -50,196 +48,17 @@ const ContentContainer: React.FC<{ title: string }> = ({ title }) => {
   );
 };
 
-export let grants = [
-  {
-    id: 1,
-    grantName: 'COVID Grant Fall 2021',
-    openDate: '2020-11-19T00:00:00.000Z',
-    closeDate: '2021-12-25T00:00:00.000Z',
-    dateWhenMoneyWasReceived: '2021-12-01T00:00:00.000Z',
-    status: 'Pending',
-    amountRequested: 2000.0,
-    amountApproved: 1000.0,
-    sponsorName: 'UNF',
-    sponsorUrl: 'www.unf.edu',
-    expenses: [
-      {
-        fiscoCode: 1,
-        expenseName: 'Salaries',
-        totalBudget: 500.0,
-        balanceRemaining: 115.0,
-        yearExpenses: [
-          {
-            yearNumber: 1,
-            totalExpenses: 300.0,
-          },
-          {
-            yearNumber: 2,
-            totalExpenses: 85.0,
-          },
-        ],
-      },
-    ],
-  },
-  {
-    id: 6,
-    grantName: 'COVID Grant 2',
-    openDate: '2020-11-19T00:00:00.000Z',
-    closeDate: '2026-08-28T00:00:00.000Z',
-    dateWhenMoneyWasReceived: '2021-12-01T00:00:00.000Z',
-    status: 'Pending',
-    amountRequested: 5000.0,
-    amountApproved: 2500.0,
-    sponsorName: 'UNF',
-    sponsorUrl: 'www.pacesetter.com',
-    expenses: [
-      {
-        fiscoCode: 1,
-        expenseName: 'Salaries',
-        totalBudget: 500.0,
-        balanceRemaining: 115.0,
-        yearExpenses: [
-          {
-            yearNumber: 1,
-            totalExpenses: 300.0,
-          },
-          {
-            yearNumber: 2,
-            totalExpenses: 85.0,
-          },
-        ],
-      },
-    ],
-  },
-  {
-    id: 2,
-    grantName: 'Performance Grant',
-    openDate: '2020-11-19T00:00:00.000Z',
-    closeDate: '2022-12-31T00:00:00.000Z',
-    dateWhenMoneyWasReceived: '2021-12-01T00:00:00.000Z',
-    status: 'Approved',
-    amountRequested: 5000.0,
-    amountApproved: 2500.0,
-    sponsorName: 'Pacesetter',
-    sponsorUrl: 'www.pacesetter.com',
-    expenses: [
-      {
-        fiscoCode: 1,
-        expenseName: 'Salaries',
-        totalBudget: 500.0,
-        balanceRemaining: 115.0,
-        yearExpenses: [
-          {
-            yearNumber: 1,
-            totalExpenses: 300.0,
-          },
-          {
-            yearNumber: 2,
-            totalExpenses: 85.0,
-          },
-        ],
-      },
-    ],
-  },
-  {
-    id: 3,
-    grantName: 'Gooby Grant',
-    openDate: '2020-11-19T00:00:00.000Z',
-    closeDate: '2020-12-31T00:00:00.000Z',
-    dateWhenMoneyWasReceived: '2021-12-01T00:00:00.000Z',
-    status: 'Approved',
-    amountRequested: 1000.0,
-    amountApproved: 16000.0,
-    sponsorName: 'Pacesetter',
-    sponsorUrl: 'www.pacesetter.com',
-    expenses: [
-      {
-        fiscoCode: 1,
-        expenseName: 'Salaries',
-        totalBudget: 500.0,
-        balanceRemaining: 115.0,
-        yearExpenses: [
-          {
-            yearNumber: 1,
-            totalExpenses: 300.0,
-          },
-          {
-            yearNumber: 2,
-            totalExpenses: 85.0,
-          },
-        ],
-      },
-    ],
-  },
-  {
-    id: 4,
-    grantName: 'Grant Grant',
-    openDate: '2020-11-19T00:00:00.000Z',
-    closeDate: '2021-08-31T00:00:00.000Z',
-    dateWhenMoneyWasReceived: '2021-12-01T00:00:00.000Z',
-    status: 'Pending',
-    amountRequested: 5000.0,
-    amountApproved: 2500.0,
-    sponsorName: 'UNF',
-    sponsorUrl: 'www.pacesetter.com',
-    expenses: [
-      {
-        fiscoCode: 1,
-        expenseName: 'Salaries',
-        totalBudget: 500.0,
-        balanceRemaining: 115.0,
-        yearExpenses: [
-          {
-            yearNumber: 1,
-            totalExpenses: 300.0,
-          },
-          {
-            yearNumber: 2,
-            totalExpenses: 85.0,
-          },
-        ],
-      },
-    ],
-  },
-  {
-    id: 5,
-    grantName: 'Bones Grant',
-    openDate: '2020-11-19T00:00:00.000Z',
-    closeDate: '2021-08-28T00:00:00.000Z',
-    dateWhenMoneyWasReceived: '2021-12-01T00:00:00.000Z',
-    status: 'Approved',
-    amountRequested: 5000.0,
-    amountApproved: 2500.0,
-    sponsorName: 'UNF',
-    sponsorUrl: 'www.pacesetter.com',
-    expenses: [
-      {
-        fiscoCode: 1,
-        expenseName: 'Salaries',
-        totalBudget: 500.0,
-        balanceRemaining: 115.0,
-        yearExpenses: [
-          {
-            yearNumber: 1,
-            totalExpenses: 300.0,
-          },
-          {
-            yearNumber: 2,
-            totalExpenses: 85.0,
-          },
-        ],
-      },
-    ],
-  },
-];
-
 function SortButton({
   onClick,
 }: {
   sortKey: any;
   onClick: MouseEventHandler<HTMLButtonElement>;
 }) {
-  return <button onClick={onClick}>▼</button>;
+  return (
+    <button onClick={onClick} className="text-xs px-2">
+      ▼
+    </button>
+  );
 }
 
 const GrantTable: React.FC = () => {
@@ -248,18 +67,10 @@ const GrantTable: React.FC = () => {
   const [sortKey, setSortKey] = useState('');
   const [open, setOpen] = useState(false);
   const { addToast } = useToast();
-  const token = localStorage.getItem('@Grantify:token');
+  const { user, signOut } = useAuth();
 
   function dateSort() {
-    /*grants =*/ grants
-      // .filter(obj => {
-      //   const currentDate = new Date();
-      //   const objDate = new Date(obj.closeDate);
-      //   if (objDate > currentDate) {
-      //     return obj;
-      //   }
-      // })
-      .sort((a, b) => (a.closeDate > b.closeDate ? 1 : -1));
+    grants.sort((a, b) => (a.closeDate > b.closeDate ? 1 : -1));
     setSortKey('sorted');
   }
 
@@ -280,10 +91,8 @@ const GrantTable: React.FC = () => {
   );
 
   useEffect(() => {
-    if (token) {
-      api.get('grants').then(response => setGrants(response.data));
-    }
-  }, [token]);
+    api.get<Grant[]>('grants').then(response => setGrants(response.data));
+  }, [addToast, signOut]);
 
   return (
     <div className="flex flex-col">
@@ -326,10 +135,9 @@ const GrantTable: React.FC = () => {
                   </th>
                   <th
                     scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium  uppercase tracking-wider"
+                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                   >
-                    Amount <span className="text-gray-800">requested</span> /{' '}
-                    <span className="text-gray-800">approved</span>
+                    Amount requested /approved
                   </th>
                   <th scope="col" className="relative px-6 py-3">
                     <span className="sr-only">View</span>
@@ -365,7 +173,7 @@ const GrantTable: React.FC = () => {
                                 {grant.grantName}
                               </div>
                               <div className="text-sm text-gray-500">
-                                {grant.sponsorName}
+                                {grant.writerName}
                               </div>
                             </div>
                           </div>

@@ -1,5 +1,9 @@
 import styled, { keyframes } from 'styled-components';
 
+export const Container = styled.div`
+  width: 600px;
+`;
+
 const appearFromBottom = keyframes`
   from {
     opacity: 0;
@@ -12,5 +16,6 @@ const appearFromBottom = keyframes`
 `;
 
 export const AnimationContainer = styled.div`
+  width: 600px;
   animation: ${appearFromBottom} 1s;
 `;

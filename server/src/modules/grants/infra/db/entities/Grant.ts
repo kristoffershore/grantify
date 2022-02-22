@@ -40,10 +40,13 @@ export default class Grant extends BaseEntity {
   amountApproved: number;
 
   @Column({ nullable: true })
-  sponsorName: string;
+  writerName: string;
 
   @Column({ nullable: true })
-  sponsorUrl: string;
+  applicationUrl: string;
+
+  @Column({ nullable: true })
+  sponsoringAgency: string;
 
   @OneToMany(() => Expense, expense => expense.grant)
   expenses: Expense[];

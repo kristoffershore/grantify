@@ -2,7 +2,6 @@ import AppError from '../../../common/errors/AppError';
 import FakeExpensesRepository from '../infra/db/repositories/fakes/FakeExpensesRepository';
 import FakeGrantsRepository from '../infra/db/repositories/fakes/FakeGrantsRepository';
 import ShowExpenseService from './ShowExpenseService';
-import ShowGrantService from './ShowGrantService';
 
 let fakeGrantsRepository: FakeGrantsRepository;
 let fakeExpensesRepository: FakeExpensesRepository;
@@ -27,15 +26,19 @@ describe('ShowExpense', () => {
       status: 'Pending',
       amountRequested: 2000.0,
       amountApproved: 1000.0,
-      sponsorName: 'UNF',
-      sponsorUrl: 'www.unf.edu',
+      writerName: 'Bruce Wayne',
+      applicationUrl: 'www.unf.edu',
+      sponsoringAgency: 'Wayne Enterprises',
       dateWhenFundsWereReceived: new Date('2021-10-21T03:24:00'),
       expirationDate: new Date('2021-12-30T03:24:00'),
     });
 
     const e = await fakeExpensesRepository.create({
       name: 'Salaries',
-      amount: 400.59,
+      lineItemCode: 1,
+      budget: 3000,
+      amountSpent: 400.59,
+      date: '06/2021',
       grantId: g.id,
     });
 
@@ -52,15 +55,19 @@ describe('ShowExpense', () => {
       status: 'Approved',
       amountRequested: 3000.99,
       amountApproved: 1500.34,
-      sponsorName: 'USF',
-      sponsorUrl: 'www.unf.edu',
+      writerName: 'Bruce Wayne',
+      applicationUrl: 'www.unf.edu',
+      sponsoringAgency: 'Wayne Enterprises',
       dateWhenFundsWereReceived: new Date('2021-10-21T03:24:00'),
       expirationDate: new Date('2021-12-30T03:24:00'),
     });
 
     const e = await fakeExpensesRepository.create({
       name: 'Salaries',
-      amount: 400.59,
+      lineItemCode: 1,
+      budget: 3000,
+      amountSpent: 400.59,
+      date: '06/2021',
       grantId: grant.id,
     });
 

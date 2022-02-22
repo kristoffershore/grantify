@@ -19,7 +19,7 @@ import { useToast } from '../../hooks/toast';
 import api from '../../services/api';
 import { Attachment } from '../../types/Attachment';
 import { Grant } from '../GrantList';
-import { AnimationContainer } from './styles';
+import { AnimationContainer, Container } from './styles';
 import * as Yup from 'yup';
 import getValidationErrors from '../../utils/getValidationErrors';
 
@@ -159,13 +159,13 @@ const ContentContainer: React.FC<{
         {grant && (
           <>
             <p className="my-4 text-gray-500">{grant.grantName}</p>
-            {/* <div className="grid grid-cols-1 p-6"> */}
-            <ArchiveList
-              setOpen={setOpen}
-              attachments={attachments}
-              deleteAttachment={deleteAttachment}
-            />
-            {/* </div> */}
+            <div className="grid grid-cols-1 p-6">
+              <ArchiveList
+                setOpen={setOpen}
+                attachments={attachments}
+                deleteAttachment={deleteAttachment}
+              />
+            </div>
           </>
         )}
         {open && <AddFileForm setOpen={setOpen} onSubmit={onSubmit} />}
@@ -181,71 +181,73 @@ const ArchiveList: React.FC<{
 }> = ({ setOpen, attachments, deleteAttachment }) => {
   return (
     <div className="bg-white shadow overflow-hidden sm:rounded-lg p-6">
-      <div className="flex flex-row items-center mb-2">
-        <h3 className="text-lg leading-6 font-medium text-gray-900">
-          Important files
-        </h3>
-        <button
-          type="button"
-          onClick={() => setOpen(true)}
-          className="mx-2 text-lg leading-6 font-medium text-indigo-600 hover:text-indigo-800"
-        >
-          +
-        </button>
-      </div>
-      <div className=" border-t border-gray-200">
-        <dl className="">
-          <div className="bg-white">
-            <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-              {attachments.length !== 0 && (
-                <ul className="my-4 border border-gray-200 rounded-md divide-y divide-gray-200">
-                  {attachments.map(attachment => (
-                    <li
-                      key={attachment.id}
-                      className="pl-3 pr-4 py-3 flex items-center justify-between text-sm"
-                    >
-                      <div className="flex-1 flex items-center">
-                        <BsPaperclip
-                          className="flex-shrink-0 h-5 w-5 text-gray-500"
-                          aria-hidden="true"
-                        />
-                        <a
-                          href={attachment.link}
-                          target="_blank"
-                          rel="noreferrer"
-                        >
-                          <span className="mx-2 flex-1 w-0 truncate">
-                            {attachment.name}
-                          </span>
-                        </a>
-                      </div>
-                      <div className="mx-2 flex-shrink-0">
-                        <button
-                          type="button"
-                          className="font-medium text-indigo-600 hover:text-indigo-500"
-                          onClick={() => {
-                            // eslint-disable-next-line no-restricted-globals
-                            const option = confirm(
-                              `Are you sure you want to delete the attachment ${attachment.name}? This action cannot be reversed`,
-                            );
-                            option &&
-                              deleteAttachment(
-                                attachment.grantId,
-                                attachment.id,
+      <Container>
+        <div className="flex flex-row items-center mb-2 justify-between">
+          <h3 className="text-lg leading-6 font-medium text-gray-900">
+            Important files
+          </h3>
+          <button
+            type="button"
+            onClick={() => setOpen(true)}
+            className="mx-2 text-lg leading-6 font-medium text-indigo-600 hover:text-indigo-800"
+          >
+            +
+          </button>
+        </div>
+        <div className=" border-t border-gray-200">
+          <dl className="">
+            <div className="bg-white">
+              <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                {attachments.length !== 0 && (
+                  <ul className="my-4 border border-gray-200 rounded-md divide-y divide-gray-200">
+                    {attachments.map(attachment => (
+                      <li
+                        key={attachment.id}
+                        className="pl-3 pr-4 py-3 flex items-center justify-between text-sm"
+                      >
+                        <div className="flex-1 flex items-center">
+                          <BsPaperclip
+                            className="flex-shrink-0 h-5 w-5 text-gray-500"
+                            aria-hidden="true"
+                          />
+                          <a
+                            href={attachment.link}
+                            target="_blank"
+                            rel="noreferrer"
+                          >
+                            <span className="mx-2 flex-1 w-0 truncate">
+                              {attachment.name}
+                            </span>
+                          </a>
+                        </div>
+                        <div className="mx-2 flex-shrink-0">
+                          <button
+                            type="button"
+                            className="font-medium text-indigo-600 hover:text-indigo-500"
+                            onClick={() => {
+                              // eslint-disable-next-line no-restricted-globals
+                              const option = confirm(
+                                `Are you sure you want to delete the attachment ${attachment.name}? This action cannot be reversed`,
                               );
-                          }}
-                        >
-                          x
-                        </button>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </dd>
-          </div>
-        </dl>
-      </div>
+                              option &&
+                                deleteAttachment(
+                                  attachment.grantId,
+                                  attachment.id,
+                                );
+                            }}
+                          >
+                            x
+                          </button>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </dd>
+            </div>
+          </dl>
+        </div>
+      </Container>
     </div>
   );
 };
@@ -272,9 +274,17 @@ const AddFileForm: React.FC<{
             <Divider />
             <div className="flex flex-col my-4">
               <Form onSubmit={onSubmit}>
-                <Input name="name" placeholder="Name" />
-                <Input name="link" placeholder="Link" />
-                <Button type="submit">Add</Button>
+                <Input
+                  name="name"
+                  label="Name"
+                  placeholder="Tax document #1 - 2021"
+                />
+                <Input
+                  name="link"
+                  label="Link"
+                  placeholder="https://www.drive.google.com/"
+                />
+                <Button type="submit">Add attachment</Button>
               </Form>
             </div>
           </div>

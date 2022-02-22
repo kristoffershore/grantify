@@ -77,7 +77,7 @@
 
   .data-box {
     @apply bg-white my-4 p-6 rounded-xl mx-2
-    shadow-lg;
+    shadow-md;
   }
 
   .data-box-title {

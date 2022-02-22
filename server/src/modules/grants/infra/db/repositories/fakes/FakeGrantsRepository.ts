@@ -23,10 +23,8 @@ export default class FakeGrantsRepository implements IGrantsRepository {
     return grant;
   }
 
-  public async findAllBySponsorName(sponsorName: string): Promise<Grant[]> {
-    const grants = this.grants.filter(
-      grant => grant.sponsorName === sponsorName,
-    );
+  public async findAllByWriterName(writerName: string): Promise<Grant[]> {
+    const grants = this.grants.filter(grant => grant.writerName === writerName);
 
     return grants;
   }

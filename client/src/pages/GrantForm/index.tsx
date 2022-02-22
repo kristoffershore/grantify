@@ -13,6 +13,7 @@ import getValidationErrors from '../../utils/getValidationErrors';
 import { Content, Section } from './styles';
 import convertFromTimestampToString from '../../utils/convertFromTimestampToString';
 import convertFromStringToTimestamp from '../../utils/convertFromStringToTimestamp';
+import Button from '../../components/Button';
 
 const GrantForm: React.FC = () => {
   const { signOut } = useAuth();
@@ -46,8 +47,9 @@ const FormFields: React.FC = () => {
   const [status, setStatus] = useState('');
   const [amountRequested, setAmountRequested] = useState(0);
   const [amountApproved, setAmountApproved] = useState(0);
-  const [sponsorName, setSponsorName] = useState('');
-  const [sponsorUrl, setSponsorUrl] = useState('');
+  const [writerName, setWriterName] = useState('');
+  const [applicationUrl, setApplicationUrl] = useState('');
+  const [sponsoringAgency, setSponsoringAgency] = useState('');
   const { addToast } = useToast();
   const history = useHistory();
   const formRef = useRef<FormHandles>(null);
@@ -67,8 +69,9 @@ const FormFields: React.FC = () => {
             'Amount requested is required',
           ),
           amountApproved: Yup.string(),
-          sponsorName: Yup.string(),
-          sponsorUrl: Yup.string(),
+          writerName: Yup.string(),
+          applicationUrl: Yup.string(),
+          sponsoringAgency: Yup.string(),
           dateWhenFundsWereReceived: Yup.string(),
           expirationDate: Yup.string(),
         });
@@ -94,8 +97,9 @@ const FormFields: React.FC = () => {
               status,
               amountRequested,
               amountApproved,
-              sponsorName,
-              sponsorUrl,
+              writerName,
+              applicationUrl,
+              sponsoringAgency,
               dateWhenFundsWereReceived,
               expirationDate,
             };
@@ -120,8 +124,11 @@ const FormFields: React.FC = () => {
             ...(amountApproved && {
               amountApproved: Number(data.amountApproved),
             }),
-            ...(sponsorName && { sponsorName: data.sponsorName }),
-            ...(sponsorUrl && { sponsorUrl: data.sponsorUrl }),
+            ...(writerName && { writerName: data.writerName }),
+            ...(applicationUrl && { applicationUrl: data.applicationUrl }),
+            ...(sponsoringAgency && {
+              sponsoringAgency: data.sponsoringAgency,
+            }),
             ...(dateWhenFundsWereReceived && {
               dateWhenFundsWereReceived: convertFromStringToTimestamp(
                 data.dateWhenFundsWereReceived,
@@ -162,6 +169,7 @@ const FormFields: React.FC = () => {
       addToast,
       amountApproved,
       amountRequested,
+      applicationUrl,
       closeDate,
       dateWhenFundsWereReceived,
       expirationDate,
@@ -169,9 +177,9 @@ const FormFields: React.FC = () => {
       history,
       id,
       openDate,
-      sponsorName,
-      sponsorUrl,
+      sponsoringAgency,
       status,
+      writerName,
     ],
   );
 
@@ -186,8 +194,9 @@ const FormFields: React.FC = () => {
           expirationDate,
           grantName,
           openDate,
-          sponsorName,
-          sponsorUrl,
+          writerName,
+          applicationUrl,
+          sponsoringAgency,
           status,
         } = response.data;
 
@@ -197,8 +206,9 @@ const FormFields: React.FC = () => {
         setStatus(status);
         setAmountRequested(amountRequested);
         if (amountApproved) setAmountApproved(amountApproved);
-        if (sponsorName) setSponsorName(sponsorName);
-        if (sponsorUrl) setSponsorUrl(sponsorUrl);
+        if (writerName) setWriterName(writerName);
+        if (applicationUrl) setApplicationUrl(applicationUrl);
+        if (sponsoringAgency) setSponsoringAgency(sponsoringAgency);
         if (dateWhenFundsWereReceived)
           setDateWhenFundsWereReceived(
             convertFromTimestampToString(dateWhenFundsWereReceived),
@@ -219,20 +229,23 @@ const FormFields: React.FC = () => {
               <Input
                 name="grantName"
                 label="Name"
+                placeholder="Wayne grant"
                 value={grantName}
                 onChange={e => setGrantName(e.target.value)}
               />
 
               <Input
                 name="openDate"
-                label="Open Date (e.g 01/01/2020)"
+                label="Open date"
+                placeholder="01/01/2022"
                 value={id && openDate}
                 onChange={e => setOpenDate(e.target.value)}
               />
 
               <Input
                 name="closeDate"
-                label="Close Date (e.g 12/31/2030)"
+                label="Close date"
+                placeholder="12/31/2022"
                 value={id && closeDate}
                 onChange={e => setCloseDate(e.target.value)}
               />
@@ -240,6 +253,7 @@ const FormFields: React.FC = () => {
               <Input
                 name="status"
                 label="Status"
+                placeholder="Pending"
                 value={id && status}
                 onChange={e => setStatus(e.target.value)}
               />
@@ -247,6 +261,7 @@ const FormFields: React.FC = () => {
               <Input
                 name="amountRequested"
                 label="Amount Requested"
+                placeholder="10000"
                 value={id && amountRequested}
                 onChange={e => setAmountRequested(Number(e.target.value))}
               />
@@ -254,34 +269,47 @@ const FormFields: React.FC = () => {
               <Input
                 name="amountApproved"
                 label="Amount Approved (optional)"
+                placeholder="5000"
                 value={id && amountApproved}
                 onChange={e => setAmountApproved(Number(e.target.value))}
               />
 
               <Input
-                name="sponsorName"
-                label="Sponsor Name (optional)"
-                value={id && sponsorName}
-                onChange={e => setSponsorName(e.target.value)}
+                name="writerName"
+                label="Writer Name (optional)"
+                placeholder="Lucius Fox"
+                value={id && writerName}
+                onChange={e => setWriterName(e.target.value)}
               />
 
               <Input
-                name="sponsorUrl"
-                label="Sponsor Url (optional)"
-                value={id && sponsorUrl}
-                onChange={e => setSponsorUrl(e.target.value)}
+                name="applicationUrl"
+                label="Application Url (optional)"
+                placeholder="https://www.wayneenterprises.com"
+                value={id && applicationUrl}
+                onChange={e => setApplicationUrl(e.target.value)}
+              />
+
+              <Input
+                name="sponsoringAgency"
+                label="Sponsoring Agency (optional)"
+                placeholder="Wayne Enterprises"
+                value={id && sponsoringAgency}
+                onChange={e => setSponsoringAgency(e.target.value)}
               />
 
               <Input
                 name="dateWhenFundsWereReceived"
-                label="Fund Receipt Date (optional) - (e.g 06/25/2021)"
+                label="Fund Receipt Date (optional)"
+                placeholder="01/30/2022"
                 value={id && dateWhenFundsWereReceived}
                 onChange={e => setDateWhenFundsWereReceived(e.target.value)}
               />
 
               <Input
                 name="expirationDate"
-                label="Expiration Date (optional) - (e.g 06/25/2021)"
+                label="Expiration Date (optional)"
+                placeholder="01/15/2023"
                 value={id && expirationDate}
                 onChange={e => setExpirationDate(e.target.value)}
               />
@@ -290,9 +318,9 @@ const FormFields: React.FC = () => {
             <footer>
               <div>
                 {id ? (
-                  <button type="submit">Update grant</button>
+                  <Button type="submit">Update grant</Button>
                 ) : (
-                  <button type="submit">Create grant</button>
+                  <Button type="submit">Create grant</Button>
                 )}
               </div>
             </footer>

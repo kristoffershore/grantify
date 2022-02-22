@@ -1,6 +1,9 @@
 export type Expense = {
   id: string;
   name: string;
-  amount: number;
+  lineItemCode: number;
+  budget: number;
+  amountSpent: number;
+  date: string;
   grantId: string;
 };

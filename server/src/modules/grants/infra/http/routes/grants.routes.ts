@@ -22,8 +22,9 @@ grantsRouter.post(
       status: Joi.string().required(),
       amountRequested: Joi.number().required(),
       amountApproved: Joi.number(),
-      sponsorName: Joi.string(),
-      sponsorUrl: Joi.string(),
+      writerName: Joi.string(),
+      applicationUrl: Joi.string(),
+      sponsoringAgency: Joi.string(),
       dateWhenFundsWereReceived: Joi.date(),
       expirationDate: Joi.date(),
     },
@@ -42,7 +43,10 @@ grantsRouter.post(
   celebrate({
     [Segments.BODY]: {
       name: Joi.string().required(),
-      amount: Joi.number().required(),
+      lineItemCode: Joi.number(),
+      budget: Joi.number().required(),
+      amountSpent: Joi.number(),
+      date: Joi.string().required(),
     },
   }),
   expensesController.create,

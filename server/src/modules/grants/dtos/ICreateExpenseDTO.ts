@@ -1,5 +1,8 @@
 export default interface ICreateExpenseDTO {
   name: string;
-  amount: number;
+  lineItemCode: number;
+  budget: number;
+  amountSpent: number;
+  date: string;
   grantId: string;
 }

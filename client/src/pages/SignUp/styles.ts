@@ -1,12 +1,11 @@
 import styled, { keyframes } from 'styled-components';
 import { shade } from 'polished';
 
-import signUpBackground from '../../assets/sign-up-background.jpeg';
-
 export const Container = styled.div`
   height: 100vh;
   display: flex;
-  align-items: stretch;
+  justify-content: center;
+  align-items: center;
 `;
 
 export const Content = styled.div`
@@ -68,10 +67,4 @@ export const AnimationContainer = styled.div`
     &:hover {
       color: ${shade(0.2, '#4080ea')};
     }
-`;
-
-export const Background = styled.div`
-  flex: 1;
-  background: url(${signUpBackground}) no-repeat center;
-  background-size: cover;
 `;

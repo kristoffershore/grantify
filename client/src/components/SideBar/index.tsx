@@ -12,7 +12,7 @@ const SideBar: React.FC<{ signOut(): void }> = ({ signOut }) => {
   return (
     <div
       className="top-0 left-0 h-screen flex flex-col w-16
-                  bg-white dark:bg-gray-900 shadow-lg"
+                  bg-white dark:bg-gray-900 shadow-xl border"
     >
       <div className="flex-auto">
         <Link to="/home">
@@ -38,7 +38,7 @@ const SideBar: React.FC<{ signOut(): void }> = ({ signOut }) => {
           <SideBarIcon icon={<BsGear size="20" />} text="Profile" />
         </Link>
         <button type="submit" onClick={signOut}>
-          <SideBarIcon icon={<BsPower size="22" />} text="Log out" />
+          <SideBarIcon icon={<BsPower size="20" />} text="Log out" />
         </button>
       </div>
     </div>

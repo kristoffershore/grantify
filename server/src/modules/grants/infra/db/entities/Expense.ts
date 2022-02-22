@@ -17,8 +17,17 @@ export default class Expense extends BaseEntity {
   @Column()
   name: string;
 
+  @Column({ type: 'decimal', nullable: true })
+  lineItemCode: number;
+
   @Column({ type: 'decimal' })
-  amount: number;
+  budget: number;
+
+  @Column({ type: 'decimal', nullable: true })
+  amountSpent: number;
+
+  @Column()
+  date: string;
 
   @Column()
   grantId: string;

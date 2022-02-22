@@ -69,9 +69,8 @@ export const Section = styled.section`
     }
 
     footer {
-      padding: 3rem 2.4rem;
-      background: #acb1c6;
-      border-top: 1px solid #6c6c70;
+      padding: 0 1.2rem 3.6rem 1.2rem;
+      background: #fff;
       margin-top: 3.2rem;
 
       p {
@@ -80,7 +79,7 @@ export const Section = styled.section`
         justify-content: center;
         font-size: 1rem;
         line-height: 2.4rem;
-        color: #9c98a6;
+        color: #fff;
 
         img {
           margin-right: 2rem;
@@ -90,14 +89,12 @@ export const Section = styled.section`
       div {
         display: flex;
         justify-content: center;
+
         button {
           width: 40%;
-          height: 2.6rem;
-          background: #4080ea;
           color: #fff;
           border: 0;
           border-radius: 0.8rem;
-          font-weight: 700;
           font-size: 1rem;
           display: flex;
           align-items: center;
@@ -105,9 +102,6 @@ export const Section = styled.section`
           text-decoration: none;
           transition: background-color 0.2s;
           margin-top: 3.2rem;
-          &:hover {
-            background: ${shade(0.2, '#4080ea')};
-          }
         }
       }
     }

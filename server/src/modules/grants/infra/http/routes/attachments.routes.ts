@@ -1,9 +1,12 @@
 import { celebrate, Joi, Segments } from 'celebrate';
 import { Router } from 'express';
+import ensureAuthenticated from '../../../../../common/infra/http/middlewares/ensureAuthenticated';
 import AttachmentsController from '../controllers/AttachmentsController';
 
 const attachmentsRouter = Router();
 const attachmentsController = new AttachmentsController();
+
+attachmentsRouter.use(ensureAuthenticated);
 
 attachmentsRouter.get('/:grantId', attachmentsController.index);
 attachmentsRouter.get('/:grantId/:attachmentId', attachmentsController.show);

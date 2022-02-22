@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import SideBar from '../../components/SideBar';
 import { useAuth } from '../../hooks/auth';
 import api from '../../services/api';
+import { Container } from './styles';
 
 type User = {
   id: string;
@@ -41,7 +42,7 @@ const UsersTable: React.FC = () => {
   }, []);
 
   return (
-    <div className="flex flex-col">
+    <Container>
       <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
         <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
           <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
@@ -82,7 +83,7 @@ const UsersTable: React.FC = () => {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm text-gray-900">
-                        {new Date(user.createdAt).getUTCMonth()}/
+                        {new Date(user.createdAt).getUTCMonth() + 1}/
                         {new Date(user.createdAt).getUTCDate()}/
                         {new Date(user.createdAt).getUTCFullYear()}
                       </div>
@@ -103,7 +104,7 @@ const UsersTable: React.FC = () => {
           </div>
         </div>
       </div>
-    </div>
+    </Container>
   );
 };
 

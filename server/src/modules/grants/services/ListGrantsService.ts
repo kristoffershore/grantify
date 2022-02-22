@@ -7,8 +7,8 @@ interface IGrantRequest {
   grantName: string;
 }
 
-interface ISponsorRequest {
-  sponsorName: string;
+interface IWriterRequest {
+  writerName: string;
 }
 
 @injectable()
@@ -23,12 +23,10 @@ export default class ListGrantService {
     return grants;
   }
 
-  public async findBySponsorName({
-    sponsorName,
-  }: ISponsorRequest): Promise<Grant[]> {
-    const grants = await this.grantsRepository.findAllBySponsorName(
-      sponsorName,
-    );
+  public async findByWriterName({
+    writerName,
+  }: IWriterRequest): Promise<Grant[]> {
+    const grants = await this.grantsRepository.findAllByWriterName(writerName);
 
     return grants;
   }

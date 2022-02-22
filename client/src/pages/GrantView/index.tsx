@@ -19,7 +19,13 @@ import { Form } from '@unform/web';
 import * as Yup from 'yup';
 import Button from '../../components/Button';
 import Divider from '../../components/Divider';
-import { AnimationContainer } from './styles';
+import {
+  AnimationContainer,
+  ButtonSpan,
+  Entry,
+  ExpenseContainer,
+  ExpenseRowContainer,
+} from './styles';
 import { Expense } from '../../types/Expense';
 import { useToast } from '../../hooks/toast';
 import { FormHandles } from '@unform/core';
@@ -62,14 +68,20 @@ const GrantView: React.FC = () => {
 
         const schema = Yup.object().shape({
           name: Yup.string().required('Expense name is required'),
-          amount: Yup.number().required('Amount is required'),
+          lineItemCode: Yup.number(),
+          budget: Yup.number().required('Budget is required'),
+          amountSpent: Yup.number(),
+          date: Yup.string().required('Date is required'),
         });
 
         await schema.validate(data, { abortEarly: false });
 
         const formData = {
           name: data.name,
-          amount: data.amount,
+          lineItemCode: data.lineItemCode,
+          budget: data.budget,
+          amountSpent: data.amountSpent,
+          date: data.date,
         };
 
         const expenseResponse = await api.post<Expense>(
@@ -82,7 +94,10 @@ const GrantView: React.FC = () => {
           {
             id: expenseResponse.data.id,
             name: expenseResponse.data.name,
-            amount: expenseResponse.data.amount,
+            lineItemCode: expenseResponse.data.lineItemCode,
+            budget: expenseResponse.data.budget,
+            amountSpent: expenseResponse.data.amountSpent,
+            date: expenseResponse.data.date,
             grantId: expenseResponse.data.grantId,
           },
         ]);
@@ -182,7 +197,7 @@ const GrantGrid: React.FC<{ grant: Grant; expenses: Expense[] }> = ({
             data={(
               grant.amountApproved -
               expenses
-                .map(expense => Number(expense.amount))
+                .map(expense => Number(expense.amountSpent))
                 .reduce((acc, cv) => (acc += cv))
             ).toFixed(2)}
           />
@@ -198,11 +213,14 @@ const GrantGrid: React.FC<{ grant: Grant; expenses: Expense[] }> = ({
             data={grant.dateWhenFundsWereReceived}
           />
         )}
-        {grant.sponsorName && (
+        {grant.writerName && (
+          <DataBox title={'Writer'} data={grant.writerName} />
+        )}
+        {grant.sponsoringAgency && (
           <DataBox
-            title={'Grantor'}
-            data={grant.sponsorName}
-            link={grant.sponsorUrl}
+            title={'Sponsoring Agency'}
+            data={grant.sponsoringAgency}
+            link={grant.applicationUrl}
           />
         )}
         <DataBox title={'Status'} data={grant.status} />
@@ -253,15 +271,6 @@ const DataBox: React.FC<{ title: string; data: string; link?: string }> = ({
           </h3>
         )}
       </div>
-
-      {/* {!isNaN(Number(data)) && (
-        <div className="data-box-graph">
-          <img
-            src={Math.floor(Math.random() * 2 + 1) % 2 === 0 ? dummy1 : dummy2}
-            alt="Graph"
-          />
-        </div>
-      )} */}
     </div>
   );
 };
@@ -274,44 +283,46 @@ const ExpensesBreakdown: React.FC<{
   return (
     <>
       <h1 className="content-title">Expenses</h1>
-      <section className="grid grid-cols-1 w-7/10">
+      <ExpenseContainer>
         <div className="bg-white my-4 p-6 rounded-xl mx-2 shadow-lg">
-          <div className="">
-            <div className="flex justify-start mb-3">
-              <h3 className="text-gray-700">Breakdown</h3>
-              <button
-                type="button"
-                onClick={() => setOpen(true)}
-                className="mx-2 text-indigo-600 hover:text-indigo-900"
-              >
-                +
-              </button>
-            </div>
-            <Divider />
-            <div className="flex flex-col my-4">
-              {expenses.map(expense => (
-                <ExpenseRow
-                  key={expense.id}
-                  expense={expense}
-                  deleteExpense={deleteExpense}
-                />
-              ))}
-            </div>
-            {expenses.length !== 0 && <Divider />}
-            <div className="flex flex-col items-center">
-              <h3 className="my-4 text-gray-500">Total expenses</h3>
-              <h3 className="text-lg">
-                $
-                {expenses.length !== 0
-                  ? expenses
-                      .map(expense => Number(expense.amount))
-                      .reduce((acc, cv) => (acc += cv))
-                  : 0}
-              </h3>
-            </div>
+          <div className="flex justify-between mb-3">
+            <h3 className="text-gray-500 text-md">Expense</h3>
+            <h3 className="text-gray-500 text-md">Line Item</h3>
+            <h3 className="text-gray-500 text-md">Budget</h3>
+            <h3 className="text-gray-500 text-md">Amount Spent</h3>
+            <h3 className="text-gray-500 text-md">Date</h3>
+            <button
+              type="button"
+              onClick={() => setOpen(true)}
+              className="mx-2 text-indigo-600 hover:text-indigo-900"
+            >
+              +
+            </button>
+          </div>
+          <Divider />
+          <div className="my-4">
+            {expenses.map(expense => (
+              <ExpenseRow
+                key={expense.id}
+                expense={expense}
+                deleteExpense={deleteExpense}
+              />
+            ))}
+          </div>
+          {expenses.length !== 0 && <Divider />}
+          <div className="flex flex-col items-center">
+            <h3 className="my-4 text-gray-500">Total expenses</h3>
+            <h3 className="text-lg">
+              $
+              {expenses.length !== 0
+                ? expenses
+                    .map(expense => Number(expense.amountSpent))
+                    .reduce((acc, cv) => (acc += cv))
+                : 0}
+            </h3>
           </div>
         </div>
-      </section>
+      </ExpenseContainer>
     </>
   );
 };
@@ -321,11 +332,24 @@ const ExpenseRow: React.FC<{ expense: Expense; deleteExpense: any }> = ({
   deleteExpense,
 }) => {
   return (
-    <div className="grid grid-cols-3">
-      <h3 className="text-gray-500">{expense.name}</h3>
-      <h3 className="flex justify-center">${expense.amount}</h3>
+    <ExpenseRowContainer>
+      <Entry width="4" justification="start">
+        {expense.name}
+      </Entry>
+      <Entry width="1" justification="center">
+        {expense.lineItemCode}
+      </Entry>
+      <Entry width="4" justification="end">
+        ${expense.budget}
+      </Entry>
+      <Entry width="5" justification="center">
+        ${expense.amountSpent}
+      </Entry>
+      <Entry width="0" justification="center">
+        {expense.date}
+      </Entry>
 
-      <span className="flex justify-center">
+      <ButtonSpan>
         <button
           type="button"
           onClick={() => {
@@ -335,12 +359,12 @@ const ExpenseRow: React.FC<{ expense: Expense; deleteExpense: any }> = ({
             );
             option && deleteExpense(expense.grantId, expense.id);
           }}
-          className="w-16 text-indigo-600 hover:text-indigo-900"
+          className="text-indigo-600 hover:text-indigo-900"
         >
-          Remove
+          x
         </button>
-      </span>
-    </div>
+      </ButtonSpan>
+    </ExpenseRowContainer>
   );
 };
 
@@ -367,9 +391,20 @@ const AddExpenseForm: React.FC<{
             <Divider />
             <div className="flex flex-col my-4">
               <Form onSubmit={onSubmit} ref={formRef}>
-                <Input name="name" placeholder="Name" />
-                <Input name="amount" placeholder="Amount" />
-                <Button type="submit">Add</Button>
+                <Input name="name" label="Name" placeholder="Salaries" />
+                <Input
+                  name="lineItemCode"
+                  label="Line Item Code (optional)"
+                  placeholder="1"
+                />
+                <Input name="budget" label="Budget" placeholder="3000" />
+                <Input
+                  name="amountSpent"
+                  label="Amount Spent (optional)"
+                  placeholder="1499.99"
+                />
+                <Input name="date" label="Date" placeholder="11/2021" />
+                <Button type="submit">Add expense</Button>
               </Form>
             </div>
           </div>

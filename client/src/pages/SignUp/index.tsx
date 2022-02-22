@@ -14,7 +14,7 @@ import getValidationErrors from '../../utils/getValidationErrors';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
 
-import { Container, Content, AnimationContainer, Background } from './styles';
+import { Container, Content, AnimationContainer } from './styles';
 import { FaFire } from 'react-icons/fa';
 
 interface SignUpFormData {
@@ -78,18 +78,17 @@ const SignUp: React.FC = () => {
 
   return (
     <Container>
-      <Background />
       <Content>
         <AnimationContainer>
-          <div className="sidebar-icon group bg-white text-secondary">
+          <div className="bg-white text-secondary">
             <FaFire size="80" />
           </div>
 
           <Form ref={formRef} onSubmit={handleSubmit}>
             <h1>Register</h1>
 
-            <Input name="first_name" icon={FiUser} placeholder="First Name" />
-            <Input name="last_name" icon={FiUser} placeholder="Last Name" />
+            <Input name="first_name" icon={FiUser} placeholder="First name" />
+            <Input name="last_name" icon={FiUser} placeholder="Last name" />
 
             <Input name="email" icon={FiMail} placeholder="Email" />
 

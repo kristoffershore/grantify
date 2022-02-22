@@ -12,8 +12,9 @@ interface IRequest {
   status?: string;
   amountRequested?: number;
   amountApproved?: number;
-  sponsorName?: string;
-  sponsorUrl?: string;
+  writerName?: string;
+  applicationUrl?: string;
+  sponsoringAgency?: string;
   dateWhenFundsWereReceived?: Date;
   expirationDate?: Date;
 }
@@ -33,8 +34,9 @@ export default class UpdateGrantService {
     status,
     amountRequested,
     amountApproved,
-    sponsorName,
-    sponsorUrl,
+    writerName,
+    applicationUrl,
+    sponsoringAgency,
     dateWhenFundsWereReceived,
     expirationDate,
   }: IRequest): Promise<Grant | undefined> {
@@ -50,8 +52,9 @@ export default class UpdateGrantService {
     status && (grant.status = status);
     amountRequested && (grant.amountRequested = amountRequested);
     amountApproved && (grant.amountApproved = amountApproved);
-    sponsorName && (grant.sponsorName = sponsorName);
-    sponsorUrl && (grant.sponsorUrl = sponsorUrl);
+    writerName && (grant.writerName = writerName);
+    applicationUrl && (grant.applicationUrl = applicationUrl);
+    sponsoringAgency && (grant.sponsoringAgency = sponsoringAgency);
     dateWhenFundsWereReceived &&
       (grant.dateWhenFundsWereReceived = dateWhenFundsWereReceived);
     expirationDate && (grant.expirationDate = expirationDate);

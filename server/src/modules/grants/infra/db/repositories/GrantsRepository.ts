@@ -33,10 +33,10 @@ export default class GrantsRepository implements IGrantsRepository {
     return grant;
   }
 
-  public async findAllBySponsorName(sponsorName: string): Promise<Grant[]> {
+  public async findAllByWriterName(writerName: string): Promise<Grant[]> {
     const grants = await this.ormRepository.find({
       where: {
-        sponsorName,
+        writerName,
       },
     });
 

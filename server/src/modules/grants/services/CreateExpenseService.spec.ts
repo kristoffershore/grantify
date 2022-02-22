@@ -26,15 +26,19 @@ describe('CreateExpense', () => {
       status: 'Pending',
       amountRequested: 2000.0,
       amountApproved: 1000.0,
-      sponsorName: 'UNF',
-      sponsorUrl: 'www.unf.edu',
+      writerName: 'Bruce Wayne',
+      applicationUrl: 'www.unf.edu',
+      sponsoringAgency: 'Wayne Enterprises',
       dateWhenFundsWereReceived: new Date('2021-10-21T03:24:00'),
       expirationDate: new Date('2021-12-30T03:24:00'),
     });
 
     const expense = await createExpense.execute({
       name: 'Salaries',
-      amount: 4000.0,
+      lineItemCode: 1,
+      budget: 3000,
+      amountSpent: 1500.78,
+      date: '12/2021',
       grantId: grant.id,
     });
 
@@ -45,7 +49,10 @@ describe('CreateExpense', () => {
     await expect(
       createExpense.execute({
         name: 'Sample expense name',
-        amount: 3000.59,
+        lineItemCode: 2,
+        budget: 3000.59,
+        amountSpent: 200,
+        date: '11/1980',
         grantId: 'non-existent grant id',
       }),
     ).rejects.toBeInstanceOf(AppError);

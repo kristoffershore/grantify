@@ -8,7 +8,10 @@ import Expense from '../infra/db/entities/Expense';
 
 interface IRequest {
   name: string;
-  amount: number;
+  lineItemCode: number;
+  budget: number;
+  amountSpent: number;
+  date: string;
   grantId: string;
 }
 
@@ -24,7 +27,10 @@ export default class CreateExpenseService {
 
   public async execute({
     name,
-    amount,
+    lineItemCode,
+    budget,
+    amountSpent,
+    date,
     grantId,
   }: IRequest): Promise<Expense | undefined> {
     const checkIfGrantExists = await this.grantsRepository.findById(grantId);
@@ -35,7 +41,10 @@ export default class CreateExpenseService {
 
     const expense = await this.expensesRepository.create({
       name,
-      amount,
+      lineItemCode,
+      budget,
+      amountSpent,
+      date,
       grantId,
     });
 

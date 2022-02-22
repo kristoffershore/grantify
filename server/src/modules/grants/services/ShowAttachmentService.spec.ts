@@ -26,8 +26,9 @@ describe('ShowAttachment', () => {
       status: 'Pending',
       amountRequested: 2000.0,
       amountApproved: 1000.0,
-      sponsorName: 'UNF',
-      sponsorUrl: 'www.unf.edu',
+      writerName: 'Bruce Wayne',
+      applicationUrl: 'www.unf.edu',
+      sponsoringAgency: 'Wayne Enterprises',
       dateWhenFundsWereReceived: new Date('2021-10-21T03:24:00'),
       expirationDate: new Date('2021-12-30T03:24:00'),
     });
@@ -51,8 +52,9 @@ describe('ShowAttachment', () => {
       status: 'Approved',
       amountRequested: 3000.99,
       amountApproved: 1500.34,
-      sponsorName: 'USF',
-      sponsorUrl: 'www.unf.edu',
+      writerName: 'Bruce Wayne',
+      applicationUrl: 'www.unf.edu',
+      sponsoringAgency: 'Wayne Enterprises',
       dateWhenFundsWereReceived: new Date('2021-10-21T03:24:00'),
       expirationDate: new Date('2021-12-30T03:24:00'),
     });

@@ -20,8 +20,9 @@ describe('RemoveGrant', () => {
       status: 'Pending',
       amountRequested: 2000.0,
       amountApproved: 1000.0,
-      sponsorName: 'UNF',
-      sponsorUrl: 'www.unf.edu',
+      writerName: 'Bruce Wayne',
+      applicationUrl: 'www.unf.edu',
+      sponsoringAgency: 'Wayne Enterprises',
       dateWhenFundsWereReceived: new Date('2021-10-21T03:24:00'),
       expirationDate: new Date('2021-12-30T03:24:00'),
     });
@@ -41,8 +42,9 @@ describe('RemoveGrant', () => {
       status: 'Pending',
       amountRequested: 2000.0,
       amountApproved: 1000.0,
-      sponsorName: 'UNF',
-      sponsorUrl: 'www.unf.edu',
+      writerName: 'Bruce Wayne',
+      applicationUrl: 'www.unf.edu',
+      sponsoringAgency: 'Wayne Enterprises',
       dateWhenFundsWereReceived: new Date('2021-10-21T03:24:00'),
       expirationDate: new Date('2021-12-30T03:24:00'),
     });

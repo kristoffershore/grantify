@@ -6,8 +6,9 @@ export type Grant = {
   status: string;
   amountRequested: number;
   amountApproved?: number;
-  sponsorName?: string;
-  sponsorUrl?: string;
+  writerName?: string;
+  applicationUrl?: string;
+  sponsoringAgency?: string;
   dateWhenFundsWereReceived?: string;
   expirationDate?: string;
 };

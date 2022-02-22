@@ -12,7 +12,7 @@ import getValidationErrors from '../../utils/getValidationErrors';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
 
-import { Container, Content, AnimationContainer, Background } from './styles';
+import { Container, Content, AnimationContainer } from './styles';
 import { FaFire } from 'react-icons/fa';
 
 interface SignInFormData {
@@ -74,7 +74,7 @@ const SignIn: React.FC = () => {
     <Container>
       <Content>
         <AnimationContainer>
-          <div className="sidebar-icon group bg-white text-secondary">
+          <div className="bg-white text-secondary">
             <FaFire size="80" />
           </div>
 
@@ -100,8 +100,6 @@ const SignIn: React.FC = () => {
           </Link>
         </AnimationContainer>
       </Content>
-
-      <Background />
     </Container>
   );
 };

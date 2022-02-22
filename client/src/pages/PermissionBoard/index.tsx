@@ -8,6 +8,7 @@ import SideBar from '../../components/SideBar';
 import { useAuth } from '../../hooks/auth';
 import { useToast } from '../../hooks/toast';
 import api from '../../services/api';
+import { Container } from './styles';
 
 type Permission = {
   id: number;
@@ -145,7 +146,7 @@ const PermissionsTable: React.FC = () => {
   }, [id]);
 
   return (
-    <div className="flex flex-col">
+    <Container>
       <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
         <div className="min-w-full divide-y divide-gray-200">
           <div className="bg-gray-50">
@@ -182,14 +183,14 @@ const PermissionsTable: React.FC = () => {
                   </div>
                 </React.Fragment>
               ))}
-              <div className="px-6 py-4 mb-2">
+              <div className="px-6 py-4 mb-2 flex justify-center">
                 <Button type="submit">Save changes</Button>
               </div>
             </Form>
           </div>
         </div>
       </div>
-    </div>
+    </Container>
   );
 };
 

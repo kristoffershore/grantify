@@ -27,14 +27,17 @@ export default class ExpensesController {
   }
 
   public async create(request: Request, response: Response): Promise<Response> {
-    const { name, amount } = request.body;
+    const { name, lineItemCode, budget, amountSpent, date } = request.body;
     const { grantId } = request.params;
 
     const createExpense = container.resolve(CreateExpenseService);
 
     const expense = await createExpense.execute({
       name,
-      amount,
+      lineItemCode,
+      budget,
+      amountSpent,
+      date,
       grantId,
     });
 
